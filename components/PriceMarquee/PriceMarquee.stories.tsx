@@ -4,7 +4,7 @@ import React from "react";
 
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import MediaIcons from "./MediaIcons";
+import PriceMarquee from "./PriceMarquee";
 import { Group } from "@mantine/core";
 
 export default {
@@ -12,15 +12,17 @@ export default {
    * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
    * to learn how to generate automatic titles
    */
-  title: "MediaIcons",
-  component: MediaIcons,
-} as ComponentMeta<typeof MediaIcons>;
+  title: "PriceMarquee",
+  component: PriceMarquee,
+} as ComponentMeta<typeof PriceMarquee>;
 
 //👇 We create a “template” of how args map to rendering
-const Template: ComponentStory<typeof MediaIcons> = () => (
+const Template: ComponentStory<typeof PriceMarquee> = (args) => (
   <Group spacing={"xs"}>
-    <MediaIcons />
+    <PriceMarquee symbols={args.symbols} />
   </Group>
 );
 
 export const Default = Template.bind({});
+
+Default.args = { symbols: ["BTCUSDT", "ETHUSDT"] };

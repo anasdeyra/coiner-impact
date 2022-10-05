@@ -13,6 +13,7 @@ export default function MainUser() {
     <Group align="start">
       <Indicator size={8} color={"green"} position="bottom-end">
         <Avatar
+          size={48}
           // @ts-ignore
           radius={"50%"}
           src={
@@ -28,7 +29,7 @@ export default function MainUser() {
           Admin
         </Text>
       </Stack>
-      <ActionIcon>
+      <ActionIcon variant="transparent">
         <BiDotsVerticalRounded />
       </ActionIcon>
     </Group>

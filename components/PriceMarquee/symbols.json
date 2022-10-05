@@ -1,0 +1,11 @@
+{
+  "BTCUSDT": "Bitcoin",
+  "ETHUSDT": "Ethereum",
+  "SHIBUSDT": "Shiba",
+  "XRPUSDT": "XRP",
+  "SOLUSDT": "Solana",
+  "DOGEUSDT": "Doge coin",
+  "MATICUSDT": "Polygon",
+  "BNBUSDT": "BNB",
+  "DAIUSDT": "Dai"
+}
