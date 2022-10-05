@@ -15,8 +15,8 @@ export default function MediaIcons() {
     <>
       {MEDIAS.map(({ Icon, link, color }, i) => (
         <Link key={i} passHref href={link}>
-          <ActionIcon size={"md"}>
-            <Icon size={24} color={color} />
+          <ActionIcon size={"sm"}>
+            <Icon size={16} color={color} />
           </ActionIcon>
         </Link>
       ))}
