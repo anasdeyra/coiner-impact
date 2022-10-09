@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { Avatar, Group, Text, Stack, Divider } from "@mantine/core";
+import { SimpleGrid, Group, Text, Stack } from "@mantine/core";
 import CoinNames from "./symbols.json";
 import Image from "next/image";
 
@@ -36,13 +36,15 @@ export default function PriceMarquee({
       await fetch(url)
     ).json();
 
-    const x = percentagesResponse.map(({ priceChangePercent }, i) => ({
-      percentage: priceChangePercent,
-      symbol: pricesResponse[i].symbol,
-      price: pricesResponse[i].price,
-    }));
+    const formatedResponse = percentagesResponse.map(
+      ({ priceChangePercent }, i) => ({
+        percentage: priceChangePercent,
+        symbol: pricesResponse[i].symbol,
+        price: pricesResponse[i].price,
+      })
+    );
 
-    x && setPrices(x);
+    formatedResponse && setPrices(formatedResponse);
   };
 
   useEffect(() => {
@@ -57,17 +59,14 @@ export default function PriceMarquee({
           borderRadius: "32px",
           overflow: "hidden",
           border: "1px solid #F5F5F5",
-          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
         }}
+        gradientWidth={0}
       >
-        <Group spacing={0}>
+        <SimpleGrid cols={9} spacing={0}>
           {prices.map((props, i) => (
-            <>
-              <PriceComponent key={i} {...props} />
-              <Divider orientation="vertical" color={"#f5f5f5"} />
-            </>
+            <PriceComponent key={i} {...props} />
           ))}
-        </Group>
+        </SimpleGrid>
       </Marquee>
     );
   return <></>;
@@ -93,7 +92,7 @@ function PriceComponent({ price, symbol, percentage }: PriceComponentProps) {
     );
 
   return (
-    <Group px={16} py={8}>
+    <Group sx={{ borderLeft: "1px solid #f5f5f5" }} px={8} py={2}>
       <Image
         style={{ borderRadius: "50%" }}
         src={`/coins/${symbol}.png`} // @ts-ignore
@@ -112,7 +111,7 @@ function PriceComponent({ price, symbol, percentage }: PriceComponentProps) {
           {symbol.slice(0, -4)}
         </Text>
       </Stack>
-      <Stack align={"end"} spacing={0}>
+      <Stack sx={{ flexGrow: 1 }} align={"end"} spacing={0}>
         <Text size={10} weight={"bold"}>
           {Number(price).toLocaleString("en-US", {
             style: "currency",
