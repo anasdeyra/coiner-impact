@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
-import { SimpleGrid, Group, Text, Stack } from "@mantine/core";
+import { SimpleGrid, Group, Text, Stack, Skeleton } from "@mantine/core";
 import CoinNames from "./symbols.json";
 import Image from "next/image";
 
@@ -69,7 +69,7 @@ export default function PriceMarquee({
         </SimpleGrid>
       </Marquee>
     );
-  return <></>;
+  return <Skeleton radius={"xl"} height={38} animate />;
 }
 
 function PriceComponent({ price, symbol, percentage }: PriceComponentProps) {

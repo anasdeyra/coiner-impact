@@ -1,45 +1,90 @@
-import { Paper, Button, Text, Grid } from "@mantine/core";
-import Link from "next/link";
+import { Card, Image, Button, Text, SimpleGrid, Box } from "@mantine/core";
+import { NextLink } from "@mantine/next";
 import { ArticleCardProps } from "./ArticleCard";
+import { useElementSize } from "@mantine/hooks";
 
 export default function ArticleOfTheDay({
   title,
   image,
   link,
   slug,
-}: ArticleCardProps) {
-  return (
-    <Paper radius={"lg"} p={0} sx={{ background: "#111", maxWidth: 800 }}>
-      <Grid columns={100} p={0}>
-        <Grid.Col p={"xl"} span={55}>
-          <Text weight={"bold"} size={32} color="white">
-            {title}
-          </Text>
-          <Text mb={48} mt={16} weight={"bold"} size={18} color={"#dadada"}>
-            {slug}
-          </Text>
+  small = false,
+}: ArticleCardProps & { small?: boolean }) {
+  const { ref, height } = useElementSize();
+  if (small)
+    return (
+      <Card radius={20} sx={{ backgroundColor: "#111", overflow: "visible" }}>
+        <Card.Section component={NextLink} href={link}>
+          <Image
+            styles={(t) => ({
+              image: {
+                borderRadius: `${t.radius.lg}px ${t.radius.lg}px 0 0 `,
+              },
+            })}
+            src={image}
+            alt="article of the day"
+            height={200}
+          />
+        </Card.Section>
 
-          <Link passHref href={link}>
-            <Button
-              radius={"xl"}
-              component="a"
-              variant="white"
-              color={"dark"}
-              size="lg"
-            >
-              Read now
-            </Button>
-          </Link>
-        </Grid.Col>
-        <Grid.Col
-          span={45}
-          sx={(t) => ({
-            backgroundImage: `url('${image}')`,
-            backgroundSize: "cover",
-            borderRadius: `0 ${t.radius.lg}px  ${t.radius.lg}px 0`,
-          })}
-        />
-      </Grid>
-    </Paper>
-  );
+        <Text color={"white"} weight={"bold"} size={20} mt="md">
+          {title}
+        </Text>
+        <Text mt="xs" color={"#d9d9d9"} weight="bold" size={14}>
+          {slug}
+        </Text>
+        <Button
+          component={NextLink}
+          href={link}
+          mt={24}
+          size="md"
+          sx={{ fontWeight: "bold" }}
+          radius={"xl"}
+          variant="white"
+          color={"dark"}
+        >
+          Read now
+        </Button>
+      </Card>
+    );
+  else
+    return (
+      <Card radius={20} sx={{ backgroundColor: "#111", overflow: "visible" }}>
+        <Card.Section>
+          <SimpleGrid ref={ref} cols={2}>
+            <Box p={"xl"}>
+              <Text color={"white"} weight={"bold"} size={36}>
+                {title}
+              </Text>
+              <Text mt={16} color={"#d9d9d9"} weight="bold" size={20}>
+                {slug}
+              </Text>
+              <Button
+                component={NextLink}
+                href={link}
+                mt={48}
+                size="lg"
+                sx={{ fontWeight: "bold" }}
+                radius={"xl"}
+                variant="white"
+                color={"dark"}
+              >
+                Read now
+              </Button>
+            </Box>
+            <Image
+              // @ts-ignore
+              styles={(t) => ({
+                image: {
+                  borderRadius: `0 ${t.radius.lg}px ${t.radius.lg}px 0 `,
+                },
+              })}
+              src={image}
+              alt="article of the day"
+              height={height}
+            />
+          </SimpleGrid>
+        </Card.Section>
+      </Card>
+    );
 }
