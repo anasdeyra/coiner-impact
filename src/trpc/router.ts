@@ -5,3 +5,4 @@ const appRouter = router({
 });
 // Export only the **type** of a router to avoid importing server code on the client
 export type AppRouter = typeof appRouter;
+export const caller = appRouter.createCaller({});

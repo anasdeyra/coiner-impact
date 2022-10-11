@@ -1,7 +1,7 @@
-import { publicProcedure, router } from "../../trpc";
-const article = router({
-  greeting: publicProcedure.query(() => "hello tRPC v10!"),
-});
+import { publicProcedure, router } from "@/trpc/trpc";
+import * as procedures from "./procedures";
+
+const article = router(procedures);
 
 export type ArticleRouter = typeof article;
 export default article;

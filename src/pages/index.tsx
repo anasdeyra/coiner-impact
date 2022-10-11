@@ -2,14 +2,11 @@ import { Box, Stack, Title } from "@mantine/core";
 import PriceMarquee from "../components/PriceMarquee/PriceMarquee";
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
 import { ARGS } from "@/components/ArticleCard/ArticleCard.stories";
-import strapi from "@strapi";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
+import { caller } from "@/trpc/router";
+import { InferGetServerSidePropsType } from "next";
 
-const Home = ({ articles }: IndexProps) => {
-  const articlesList = articles.data.map(({ attributes, id }) => (
-    <ArticleCard key={id} {...attributes} />
-  ));
-
+const Home = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
       <PriceMarquee />
@@ -22,9 +19,7 @@ const Home = ({ articles }: IndexProps) => {
         </Box>
         <Box>
           <Title order={1}>Latest Articles</Title>
-          <Stack mt={32} spacing={24}>
-            {articlesList}
-          </Stack>
+          <Stack mt={32} spacing={24}></Stack>
         </Box>
       </Stack>
     </>
@@ -32,16 +27,9 @@ const Home = ({ articles }: IndexProps) => {
 };
 
 export const getServerSideProps = async () => {
-  const articles = await strapi.find("articles", { populate: "deep" });
-
   return {
-    props: { articles },
+    props: {},
   };
 };
-
-interface IndexProps {
-  articles: StrapiResponse<Article[]>;
-  mainArticle: StrapiResponse<Article>;
-}
 
 export default Home;
