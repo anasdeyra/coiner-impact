@@ -28,26 +28,25 @@ export default function PriceMarquee({
     '","'
   )}"]`;
 
-  const getPrices = async () => {
-    const percentagesResponse: { priceChangePercent: string }[] = await (
-      await fetch(url2)
-    ).json();
-    const pricesResponse: { symbol: string; price: string }[] = await (
-      await fetch(url)
-    ).json();
-
-    const formatedResponse = percentagesResponse.map(
-      ({ priceChangePercent }, i) => ({
-        percentage: priceChangePercent,
-        symbol: pricesResponse[i].symbol,
-        price: pricesResponse[i].price,
-      })
-    );
-
-    formatedResponse && setPrices(formatedResponse);
-  };
-
   useEffect(() => {
+    const getPrices = async () => {
+      const percentagesResponse: { priceChangePercent: string }[] = await (
+        await fetch(url2)
+      ).json();
+      const pricesResponse: { symbol: string; price: string }[] = await (
+        await fetch(url)
+      ).json();
+
+      const formatedResponse = percentagesResponse.map(
+        ({ priceChangePercent }, i) => ({
+          percentage: priceChangePercent,
+          symbol: pricesResponse[i].symbol,
+          price: pricesResponse[i].price,
+        })
+      );
+
+      formatedResponse && setPrices(formatedResponse);
+    };
     getPrices();
 
     setInterval(getPrices, 60000);

@@ -1,1 +1,1 @@
-export { getAlltitles } from "./procedure/getAllTitles";
+export { infiniteScroll } from "./procedure/infiniteScroll";

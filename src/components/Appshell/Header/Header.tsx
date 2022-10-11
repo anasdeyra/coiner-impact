@@ -1,7 +1,7 @@
 import {
   ActionIcon,
   Avatar,
-  Burger,
+  Menu,
   Divider,
   Group,
   Header as H,
@@ -13,19 +13,35 @@ import {
   FiMenu,
   FiBell,
 } from "react-icons/fi";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Header() {
+  const { data } = useSession();
   return (
     <H p={16} withBorder={false} pb={0} height={55 + 16}>
       <Group>
-        <Avatar
-          //@ts-ignore
-          radius={"50%"}
-          size={"md"}
-          src={
-            "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80"
-          }
-        />
+        {data && (
+          <Menu position="bottom-start">
+            <Menu.Target>
+              <Avatar
+                //@ts-ignore
+                radius={"50%"}
+                size={"md"}
+                src={data.user?.image}
+              />
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item
+                color={"red"}
+                onClick={() => {
+                  signOut();
+                }}
+              >
+                logout
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        )}
         <Group spacing={16} position="right" sx={{ flexGrow: 1 }}>
           <ActionIcon variant="transparent">
             <SearchIcon color={"#111"} size={24} />
