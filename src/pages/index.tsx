@@ -2,8 +2,7 @@ import { Box, Stack, Title } from "@mantine/core";
 import PriceMarquee from "../components/PriceMarquee/PriceMarquee";
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
 import { ARGS } from "@/components/ArticleCard/ArticleCard.stories";
-import ArticleCard from "@/components/ArticleCard/ArticleCard";
-import { caller } from "@/trpc/router";
+
 import { InferGetServerSidePropsType } from "next";
 
 const Home = ({}: InferGetServerSidePropsType<typeof getServerSideProps>) => {

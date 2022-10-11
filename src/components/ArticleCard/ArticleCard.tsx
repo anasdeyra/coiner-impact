@@ -14,17 +14,17 @@ import {
 import Link from "next/link";
 import React from "react";
 import { UserCardProps } from "../UserCard/UserCard";
+import { Article, User } from "@prisma/client";
 
 dayjs.extend(relativeTime);
 
 export default function ArticleCard({
   author,
-  content,
-  image,
+  imageUrl,
   publishedAt,
   slug,
   title,
-}: ArticleAttributes) {
+}: ArticleCardProps) {
   const link = `/article/${title.toLowerCase().replaceAll(" ", "-")}`;
   return (
     <Card sx={{ background: "transparent" }} radius={"lg"} p={0} pb="md">
@@ -39,12 +39,7 @@ export default function ArticleCard({
             ratio={16 / 10}
             m={0}
           >
-            <Image
-              src={`${
-                process.env.NEXT_PUBLIC_STRAPI_URL +
-                image.data.attributes.formats.small.url
-              }`}
-            />
+            <Image src={imageUrl} />
           </AspectRatio>
         </Link>
 
@@ -58,23 +53,19 @@ export default function ArticleCard({
           <Avatar //@ts-ignore
             radius={"50%"}
             size={"sm"}
-            src={
-              process.env.NEXT_PUBLIC_STRAPI_URL +
-              author.data.attributes.picture.data.attributes.formats.thumbnail
-                .url
-            }
+            src={author.image}
           ></Avatar>
           <Group align={"center"} spacing={10} position={"center"}>
             <Text size={14} color={"dimmed"} weight="normal">
               By{" "}
-              <Link passHref href={`/profile/${author.data.id}`}>
+              <Link passHref href={`/profile/${author.id}`}>
                 <Text
                   component="a"
                   variant="link"
                   sx={{ display: "inline", color: "#111" }}
                   weight={700}
                 >
-                  {author.data.attributes.name}
+                  {author.name}
                 </Text>
               </Link>
             </Text>
@@ -96,10 +87,6 @@ export default function ArticleCard({
   );
 }
 
-export interface ArticleCardProps {
-  image: string;
-  title: string;
-  slug: string;
-  author: UserCardProps;
-  link: string;
+export interface ArticleCardProps extends Article {
+  author: User;
 }

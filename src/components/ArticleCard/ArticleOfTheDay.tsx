@@ -5,12 +5,12 @@ import { useElementSize } from "@mantine/hooks";
 
 export default function ArticleOfTheDay({
   title,
-  image,
-  link,
+  imageUrl,
   slug,
   small = false,
 }: ArticleCardProps & { small?: boolean }) {
   const { ref, height } = useElementSize();
+  const link = `/article/${title.toLowerCase().replaceAll(" ", "-")}`;
   if (small)
     return (
       <Card radius={20} sx={{ backgroundColor: "#111", overflow: "visible" }}>
@@ -21,7 +21,7 @@ export default function ArticleOfTheDay({
                 borderRadius: `${t.radius.lg}px ${t.radius.lg}px 0 0 `,
               },
             })}
-            src={image}
+            src={imageUrl}
             alt="article of the day"
             height={200}
           />
@@ -79,7 +79,7 @@ export default function ArticleOfTheDay({
                   borderRadius: `0 ${t.radius.lg}px ${t.radius.lg}px 0 `,
                 },
               })}
-              src={image}
+              src={imageUrl}
               alt="article of the day"
               height={height}
             />
