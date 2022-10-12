@@ -4,11 +4,11 @@ import { MantineProvider } from "@mantine/core";
 import Appshell from "../components/Appshell/Appshell";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { trpc } from "@/trpc/hook";
+import { NotificationsProvider } from "@mantine/notifications";
+import { ModalsProvider } from "@mantine/modals";
 
-export default function App({
-  Component,
-  pageProps,
-}: AppProps<{ session: Session }>) {
+function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
     <>
       <Head>
@@ -27,11 +27,17 @@ export default function App({
             colorScheme: "light",
           }}
         >
-          <Appshell>
-            <Component {...pageProps} />
-          </Appshell>
+          <NotificationsProvider>
+            <ModalsProvider>
+              <Appshell>
+                <Component {...pageProps} />
+              </Appshell>
+            </ModalsProvider>
+          </NotificationsProvider>
         </MantineProvider>
       </SessionProvider>
     </>
   );
 }
+
+export default trpc.withTRPC(App);

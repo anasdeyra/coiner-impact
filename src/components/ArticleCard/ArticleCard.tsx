@@ -6,15 +6,14 @@ import {
   Card,
   Group,
   Image,
-  Paper,
   Stack,
   Text,
   AspectRatio,
 } from "@mantine/core";
 import Link from "next/link";
 import React from "react";
-import { UserCardProps } from "../UserCard/UserCard";
 import { Article, User } from "@prisma/client";
+import { NextLink } from "@mantine/next";
 
 dayjs.extend(relativeTime);
 
@@ -29,19 +28,11 @@ export default function ArticleCard({
   return (
     <Card sx={{ background: "transparent" }} radius={"lg"} p={0} pb="md">
       <Stack spacing={0}>
-        <Link href={link}>
-          <AspectRatio
-            sx={{
-              overflow: "hidden",
-              borderRadius: 16,
-              width: "100%",
-            }}
-            ratio={16 / 10}
-            m={0}
-          >
-            <Image src={imageUrl} />
+        <NextLink href={link}>
+          <AspectRatio ratio={16 / 10} m={0}>
+            <Image radius={"md"} src={imageUrl} />
           </AspectRatio>
-        </Link>
+        </NextLink>
 
         <Text weight={700} size={"lg"} mt={16}>
           {title}

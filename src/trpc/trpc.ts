@@ -1,7 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { Context } from "./context";
 
-const t = initTRPC.context<Context>().create();
+export const t = initTRPC.context<Context>().create();
 
 const isAdmin = t.middleware(({ next, ctx }) => {
   if (ctx.session?.user.role !== "admin") {
