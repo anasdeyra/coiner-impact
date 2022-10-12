@@ -40,7 +40,9 @@ export default function admin() {
         spacing={"xl"}
       >
         {articlesQuery.data &&
-          articlesQuery.data.map((props) => <ArticleCard {...props} />)}
+          articlesQuery.data.map((props) => (
+            <ArticleCard key={props.id} {...props} />
+          ))}
       </SimpleGrid>
       <ArticleModal
         mode="Create"
