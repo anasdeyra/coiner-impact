@@ -4,7 +4,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import { trpc } from "@/trpc/hook";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
-import { Group, Title, SimpleGrid, Button } from "@mantine/core";
+import { Group, Text, SimpleGrid, Button } from "@mantine/core";
 import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
 import { useDisclosure } from "@mantine/hooks";
 
@@ -15,15 +15,14 @@ export default function admin() {
   return (
     <>
       <Group mt={48} position="apart">
-        <Title>
+        <Text weight={"bold"} size={28}>
           My Articles {articlesQuery.data && `(${articlesQuery.data.length})`}
-        </Title>
+        </Text>
         <Button
           onClick={() => {
             articleModalHandlers.open();
           }}
           radius={"xl"}
-          size="md"
           color={"dark"}
         >
           Create
@@ -41,7 +40,7 @@ export default function admin() {
       >
         {articlesQuery.data &&
           articlesQuery.data.map((props) => (
-            <ArticleCard key={props.id} {...props} />
+            <ArticleCard withAuthor key={props.id} {...props} />
           ))}
       </SimpleGrid>
       <ArticleModal

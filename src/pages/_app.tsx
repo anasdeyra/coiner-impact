@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { trpc } from "@/trpc/hook";
 import { NotificationsProvider } from "@mantine/notifications";
+import { Global } from "@emotion/react";
 
 function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
@@ -22,10 +23,15 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           withGlobalStyles
           withNormalizeCSS
           theme={{
-            /** Put your mantine theme override here */
-            colorScheme: "light",
+            fontFamily: "Open Sans",
+            headings: { fontFamily: "Open Sans" },
           }}
         >
+          <Global
+            styles={[
+              "@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap')",
+            ]}
+          />
           <NotificationsProvider>
             <Appshell>
               <Component {...pageProps} />

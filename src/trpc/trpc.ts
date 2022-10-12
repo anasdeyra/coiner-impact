@@ -4,7 +4,7 @@ import { Context } from "./context";
 export const t = initTRPC.context<Context>().create();
 
 const isAdmin = t.middleware(({ next, ctx }) => {
-  if (ctx.session?.user.role !== "admin") {
+  if (!ctx.session || ctx.session.user.role !== "admin") {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });

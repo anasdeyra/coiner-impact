@@ -7,7 +7,7 @@ export const addArticle = AdminProcedure.input(
     topic: z.string(),
     title: z.string(),
     slug: z.string(),
-    imageUrl: z.string(),
+    imageUrl: z.string().url(),
     content: z.string(),
     isPublished: z.boolean().optional(),
   })
