@@ -5,17 +5,27 @@ import { useSession } from "next-auth/react";
 import { trpc } from "@/trpc/hook";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
 import { Group, Title, SimpleGrid, Button } from "@mantine/core";
+import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function admin() {
   const session = useSession();
   const articlesQuery = trpc.article.infiniteScroll.useQuery({});
+  const [articleModalIsOpened, articleModalHandlers] = useDisclosure(false);
   return (
     <>
       <Group mt={48} position="apart">
         <Title>
-          Articles {articlesQuery.data && `(${articlesQuery.data.length})`}
+          My Articles {articlesQuery.data && `(${articlesQuery.data.length})`}
         </Title>
-        <Button radius={"xl"} size="md" color={"dark"}>
+        <Button
+          onClick={() => {
+            articleModalHandlers.open();
+          }}
+          radius={"xl"}
+          size="md"
+          color={"dark"}
+        >
           Create
         </Button>
       </Group>
@@ -31,11 +41,12 @@ export default function admin() {
       >
         {articlesQuery.data &&
           articlesQuery.data.map((props) => <ArticleCard {...props} />)}
-        {articlesQuery.data &&
-          articlesQuery.data.map((props) => <ArticleCard {...props} />)}
-        {articlesQuery.data &&
-          articlesQuery.data.map((props) => <ArticleCard {...props} />)}
       </SimpleGrid>
+      <ArticleModal
+        mode="Create"
+        close={articleModalHandlers.close}
+        opened={articleModalIsOpened}
+      />
     </>
   );
 }

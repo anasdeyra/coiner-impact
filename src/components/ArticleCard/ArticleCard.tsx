@@ -23,14 +23,25 @@ export default function ArticleCard({
   publishedAt,
   slug,
   title,
+  withAuthor = false,
 }: ArticleCardProps) {
   const link = `/article/${title.toLowerCase().replaceAll(" ", "-")}`;
   return (
-    <Card sx={{ background: "transparent" }} radius={"lg"} p={0} pb="md">
+    <Card sx={{ background: "transparent", overflow: "visible" }} p={0} pb="md">
       <Stack spacing={0}>
         <NextLink href={link}>
-          <AspectRatio ratio={16 / 10} m={0}>
-            <Image radius={"md"} src={imageUrl} />
+          <AspectRatio ratio={16 / 10} mx="auto">
+            <img
+              style={{
+                objectFit: "cover",
+                height: "100%",
+                borderRadius: 12,
+                boxShadow:
+                  "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+              }}
+              alt={title}
+              src={imageUrl}
+            />
           </AspectRatio>
         </NextLink>
 
@@ -40,39 +51,41 @@ export default function ArticleCard({
         <Text color={"dimmed"} weight={"bold"} size={"sm"} mt={8}>
           {slug}
         </Text>
-        <Group spacing={14} mt={16} align={"center"}>
-          <Avatar //@ts-ignore
-            radius={"50%"}
-            size={"sm"}
-            src={author.image}
-          ></Avatar>
-          <Group align={"center"} spacing={10} position={"center"}>
-            <Text size={14} color={"dimmed"} weight="normal">
-              By{" "}
-              <Link passHref href={`/profile/${author.id}`}>
-                <Text
-                  component="a"
-                  variant="link"
-                  sx={{ display: "inline", color: "#111" }}
-                  weight={700}
-                >
-                  {author.name}
-                </Text>
-              </Link>
-            </Text>
-            <Box
-              sx={{
-                borderRadius: "50%",
-                background: "#868E96",
-                width: "6px",
-                height: "6px",
-              }}
-            />
-            <Text size={14} color={"dimmed"} weight="normal">
-              {dayjs(publishedAt).fromNow()}
-            </Text>
+        {withAuthor && (
+          <Group spacing={14} mt={16} align={"center"}>
+            <Avatar //@ts-ignore
+              radius={"50%"}
+              size={"sm"}
+              src={author.image}
+            ></Avatar>
+            <Group align={"center"} spacing={10} position={"center"}>
+              <Text size={14} color={"dimmed"} weight="normal">
+                By{" "}
+                <Link passHref href={`/profile/${author.id}`}>
+                  <Text
+                    component="a"
+                    variant="link"
+                    sx={{ display: "inline", color: "#111" }}
+                    weight={700}
+                  >
+                    {author.name}
+                  </Text>
+                </Link>
+              </Text>
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  background: "#868E96",
+                  width: "6px",
+                  height: "6px",
+                }}
+              />
+              <Text size={14} color={"dimmed"} weight="normal">
+                {dayjs(publishedAt).fromNow()}
+              </Text>
+            </Group>
           </Group>
-        </Group>
+        )}
       </Stack>
     </Card>
   );
@@ -80,4 +93,5 @@ export default function ArticleCard({
 
 export interface ArticleCardProps extends Article {
   author: User;
+  withAuthor?: boolean;
 }

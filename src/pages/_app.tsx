@@ -6,7 +6,6 @@ import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
 import { trpc } from "@/trpc/hook";
 import { NotificationsProvider } from "@mantine/notifications";
-import { ModalsProvider } from "@mantine/modals";
 
 function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
@@ -28,11 +27,9 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           }}
         >
           <NotificationsProvider>
-            <ModalsProvider>
-              <Appshell>
-                <Component {...pageProps} />
-              </Appshell>
-            </ModalsProvider>
+            <Appshell>
+              <Component {...pageProps} />
+            </Appshell>
           </NotificationsProvider>
         </MantineProvider>
       </SessionProvider>

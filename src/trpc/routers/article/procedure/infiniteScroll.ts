@@ -16,6 +16,7 @@ export const infiniteScroll = publicProcedure
         // @ts-ignore
       },
       include: { author: true },
+      orderBy: { createdAt: "desc" },
     });
     return articles;
   });

@@ -2,7 +2,7 @@ import { AdminProcedure } from "@/trpc/trpc";
 import prisma from "@db";
 import { z } from "zod";
 
-export const infiniteScroll = AdminProcedure.input(
+export const addArticle = AdminProcedure.input(
   z.object({
     topic: z.string(),
     title: z.string(),
@@ -12,7 +12,7 @@ export const infiniteScroll = AdminProcedure.input(
     isPublished: z.boolean().optional(),
   })
 ).mutation(async ({ ctx, input }) => {
-  const publishedAt = new Date(Date.now());
+  const publishedAt = new Date(input.isPublished ? Date.now() : 0);
   await prisma.article.create({
     //@ts-ignore
     data: {
