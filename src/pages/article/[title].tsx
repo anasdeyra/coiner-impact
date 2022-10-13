@@ -40,10 +40,6 @@ export const getStaticProps = async (ctx: any) => {
     include: { author: true },
   });
 
-  if (!article)
-    return {
-      redirect: { destination: "/", permanent: false },
-    };
   return {
     props: { ...JSON.parse(JSON.stringify(article)) },
     revalidate: 600,

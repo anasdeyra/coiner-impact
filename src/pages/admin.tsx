@@ -16,6 +16,7 @@ import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
 import { useDisclosure } from "@mantine/hooks";
 import showNotification from "src/utils/showNotification";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 const AdminOptions = dynamic(
   () => import("@/components/ArticleCard/AdminOptions"),
   { ssr: false }
@@ -26,11 +27,19 @@ const useStyles = createStyles((t) => ({
 }));
 
 export default function admin() {
-  const { classes } = useStyles();
-  const articlesQuery = trpc.article.infiniteScroll.useQuery({});
   const [articleModalIsOpened, articleModalHandlers] = useDisclosure(false);
+  const [selectedArticle, setSelectedArticle] = useState(-1);
+
+  const { classes } = useStyles();
+
   const trpcContext = trpc.useContext();
-  const publishQuery = trpc.article.pusblish.useMutation({
+
+  const articlesQuery = trpc.article.infiniteScroll.useQuery({});
+
+  const publishMutation = trpc.article.pusblish.useMutation({
+    onMutate({ id }) {
+      setSelectedArticle(id);
+    },
     onSuccess(_, { isPublished }) {
       showNotification({
         title: `Article was ${
@@ -50,8 +59,30 @@ export default function admin() {
     },
   });
 
+  const deleteMutation = trpc.article.del.useMutation({
+    onMutate({ id }) {
+      setSelectedArticle(id);
+    },
+    onSuccess() {
+      showNotification({
+        title: `Article was deleted successfully!`,
+      });
+      trpcContext.article.invalidate();
+    },
+    onError() {
+      showNotification({
+        title: `There was a problem deleting an article`,
+        isError: true,
+      });
+    },
+  });
+
   const publishHandler = (data: { id: number; isPublished: boolean }) => () => {
-    publishQuery.mutate(data);
+    publishMutation.mutate(data);
+  };
+
+  const deleteHandler = (id: number) => () => {
+    deleteMutation.mutate({ id });
   };
 
   return (
@@ -86,11 +117,17 @@ export default function admin() {
               <ArticleCard {...props} />
               <AdminOptions
                 article={props}
-                isPublishing={publishQuery.isLoading}
+                isDeleting={
+                  deleteMutation.isLoading && selectedArticle === props.id
+                }
+                isPublishing={
+                  publishMutation.isLoading && selectedArticle === props.id
+                }
                 publishHandler={publishHandler({
                   id: props.id,
                   isPublished: !props.isPublished,
                 })}
+                deleteHandler={deleteHandler(props.id)}
               />
             </Box>
           ))}

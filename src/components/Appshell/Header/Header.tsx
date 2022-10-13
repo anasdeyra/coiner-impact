@@ -5,6 +5,7 @@ import {
   Divider,
   Group,
   Header as H,
+  Button,
 } from "@mantine/core";
 
 import {
@@ -19,8 +20,8 @@ export default function Header() {
   const { data } = useSession();
   return (
     <H p={16} withBorder={false} pb={0} height={55 + 16}>
-      <Group>
-        {data && (
+      <Group position="apart">
+        {data ? (
           <Menu position="bottom-start">
             <Menu.Target>
               <Avatar
@@ -41,8 +42,17 @@ export default function Header() {
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
+        ) : (
+          <Button component="a" href="/api/auth/signin" color={"dark"}>
+            signin
+          </Button>
         )}
-        <Group spacing={16} position="right" sx={{ flexGrow: 1 }}>
+        {data && (
+          <Button color={"dark"} component="a" href="/admin">
+            go admin
+          </Button>
+        )}
+        <Group spacing={16} position="right">
           <ActionIcon variant="transparent">
             <SearchIcon color={"#111"} size={24} />
           </ActionIcon>

@@ -1,7 +1,16 @@
-import { Stack, createStyles, ActionIcon, Tooltip } from "@mantine/core";
+import {
+  Stack,
+  createStyles,
+  ActionIcon,
+  Tooltip,
+  Popover,
+  Text,
+  Group,
+  Button,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Article, User } from "@prisma/client";
-import { MdPublish, MdEdit } from "react-icons/md";
+import { MdPublish, MdEdit, MdDelete } from "react-icons/md";
 import ArticleModal from "../Modals/ArticleModal/ArticleModal";
 
 const useStyles = createStyles((t) => ({
@@ -17,11 +26,14 @@ const useStyles = createStyles((t) => ({
 
 export default function AdminOptions({
   publishHandler,
+  deleteHandler,
   article,
   isPublishing,
+  isDeleting,
 }: Props) {
   const { classes } = useStyles();
   const [opened, { close, open }] = useDisclosure(false);
+  const [delPopOpened, delPopHandlers] = useDisclosure(false);
   return (
     <>
       <ArticleModal
@@ -54,6 +66,49 @@ export default function AdminOptions({
             </ActionIcon>
           </Tooltip>
         )}
+
+        <Popover
+          opened={delPopOpened}
+          position="bottom"
+          withArrow
+          width={"max-content"}
+        >
+          <Popover.Target>
+            <Tooltip label="delete">
+              <ActionIcon
+                onClick={delPopHandlers.toggle}
+                variant="filled"
+                color="red"
+              >
+                <MdDelete />
+              </ActionIcon>
+            </Tooltip>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Stack align={"center"} spacing={"xs"}>
+              <Text size={"xs"}>Delete this article?</Text>
+
+              <Group grow>
+                <Button
+                  onClick={delPopHandlers.close}
+                  size="xs"
+                  color={"dark"}
+                  variant="light"
+                >
+                  cancel
+                </Button>
+                <Button
+                  loading={isDeleting}
+                  size="xs"
+                  onClick={deleteHandler}
+                  color={"red"}
+                >
+                  Delete
+                </Button>
+              </Group>
+            </Stack>
+          </Popover.Dropdown>
+        </Popover>
       </Stack>
     </>
   );
@@ -61,6 +116,8 @@ export default function AdminOptions({
 
 interface Props {
   publishHandler: () => void;
+  deleteHandler: () => void;
   article: Article & { author: User };
   isPublishing: boolean;
+  isDeleting: boolean;
 }
