@@ -128,22 +128,26 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
 
   return (
     <Modal
+      trapFocus
       radius={"lg"}
       title={`${mode} an article`}
       size={"xl"}
       onClose={close}
       opened={opened}
       closeOnClickOutside={false}
-      styles={{ title: { fontWeight: "bold", fontSize: 24 } }}
+      styles={{
+        title: { fontWeight: "bold", fontSize: 24 },
+      }}
     >
-      <LoadingOverlay
-        loaderProps={{ color: "dark" }}
-        visible={isLoading}
-        overlayColor="#111"
-        overlayBlur={2}
-      />
       <form onSubmit={handleSubmit}>
-        <Stack mt={48}>
+        <Stack sx={{ position: "relative" }} mt={48}>
+          <LoadingOverlay
+            radius={"md"}
+            loaderProps={{ color: "dark" }}
+            visible={isLoading}
+            overlayColor="#111"
+            overlayBlur={2}
+          />
           <Group grow>
             <TextInput
               radius={"md"}
@@ -151,6 +155,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
               required
               {...form.getInputProps("title")}
               error={form.errors.title}
+              placeholder={"Article title"}
             />
             <Select
               color="dark"
@@ -166,6 +171,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
                 Topic.nft,
                 Topic.web3,
               ]}
+              placeholder="Choose a topic"
             />
           </Group>
           <TextInput
@@ -174,6 +180,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             required
             {...form.getInputProps("slug")}
             error={form.errors.slug}
+            placeholder={"Article slug"}
           />
           <TextInput
             radius={"md"}
@@ -181,6 +188,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             required
             {...form.getInputProps("imageUrl")}
             error={form.errors?.imageUrl}
+            placeholder={"https://example.com/cool-image.jpg"}
           />
           <Switch
             color={"dark"}
@@ -200,26 +208,20 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             // onImageUpload={handleImageUpload}
             value={form.values.content}
           />
-
-          <Group mt={"md"} position="right">
-            <Button
-              onClick={close}
-              radius={"md"}
-              variant="subtle"
-              color={"dark"}
-            >
-              Cancel
-            </Button>
-            <Button
-              loading={isLoading}
-              type="submit"
-              radius={"md"}
-              color={"dark"}
-            >
-              {mode}
-            </Button>
-          </Group>
         </Stack>
+        <Group mt={"xl"} position="right">
+          <Button onClick={close} radius={"md"} variant="subtle" color={"dark"}>
+            Cancel
+          </Button>
+          <Button
+            loading={isLoading}
+            type="submit"
+            radius={"md"}
+            color={"dark"}
+          >
+            {mode}
+          </Button>
+        </Group>
       </form>
     </Modal>
   );
