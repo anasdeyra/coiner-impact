@@ -23,9 +23,12 @@ export default function ArticleCard({
   publishedAt,
   slug,
   title,
+  isPublished,
   withAuthor = false,
 }: ArticleCardProps) {
-  const link = `/article/${title.toLowerCase().replaceAll(" ", "-")}`;
+  const link = isPublished
+    ? `/article/${title.toLowerCase().replaceAll(" ", "-")}`
+    : "#";
   return (
     <Card sx={{ background: "transparent", overflow: "visible" }} p={0} pb="md">
       <Stack spacing={0}>

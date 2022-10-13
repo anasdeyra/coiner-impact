@@ -28,4 +28,4 @@ export const publicProcedure = t.procedure;
 /**
  * Protected procedure
  **/
-export const AdminProcedure = t.procedure.use(isAdmin);
+export const adminProcedure = t.procedure.use(isAdmin);

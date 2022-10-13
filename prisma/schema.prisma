@@ -64,7 +64,7 @@ model Article {
   updatedAt       DateTime         @updatedAt
   //attributes
   title           String           @unique @db.VarChar(255)
-  content         String
+  content         String           @db.LongText
   slug            String           @unique @db.VarChar(255)
   topic           Topic
   imageUrl        String           @unique

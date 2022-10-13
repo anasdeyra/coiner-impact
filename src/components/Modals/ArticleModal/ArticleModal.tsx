@@ -9,13 +9,15 @@ import {
   Select,
   Loader,
   Center,
+  LoadingOverlay,
 } from "@mantine/core";
 import { trpc } from "@/trpc/hook";
 import { useForm } from "@mantine/form";
 import dynamic from "next/dynamic";
 import { Article, Topic } from "@prisma/client";
-import { showNotification } from "@mantine/notifications";
 import { FiCheck, FiX } from "react-icons/fi";
+import showNotification from "src/utils/showNotification";
+// import { useCallback } from "react";
 
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
   ssr: false,
@@ -27,49 +29,120 @@ const RichTextEditor = dynamic(() => import("@mantine/rte"), {
 });
 
 export default function ArticleModal({ close, mode, opened, article }: Props) {
-  const { mutate, isLoading } = trpc.article.addArticle.useMutation({
-    onSuccess: () => {
+  const trpcContext = trpc.useContext();
+
+  const addMutation = trpc.article.add.useMutation({
+    onSuccess: (_, { title }) => {
       close();
       showNotification({
-        message: "Article added successfully!",
-        color: "dark",
-        icon: <FiCheck />,
+        title: `Article was added successfully!`,
+        message: title,
       });
-      trpc.useContext().article.invalidate();
+      trpcContext.article.invalidate();
     },
-    onError: () => {
+    onError: (e) => {
       showNotification({
-        message: "There was problem adding your article!",
-        color: "dark",
-        icon: <FiX />,
+        title: `There was problem adding your article!`,
+        isError: true,
       });
+      const error = JSON.parse(e.message)[0];
+
+      form.setFieldError(error.path[0] || "", error.message || "");
+    },
+  });
+
+  const editMutation = trpc.article.edit.useMutation({
+    onSuccess: (_, { title }) => {
+      close();
+      showNotification({
+        title: `Article was edited successfully`,
+        message: title,
+      });
+      trpcContext.article.invalidate();
+    },
+    onError: (e) => {
+      showNotification({
+        title: `There was problem editing your article!`,
+        isError: true,
+      });
+      const error = JSON.parse(e.message)[0];
+
+      form.setFieldError(error.path[0] || "", error.message || "");
     },
   });
 
   const form = useForm({
-    initialValues: {
-      isPublished: false,
-      topic: "",
-      title: "",
-      slug: "",
-      imageUrl: "",
-      content: "<p>Start writing your article <b>here</b></p>",
-    },
+    initialValues: article
+      ? {
+          isPublished: article.isPublished,
+          topic: article.topic,
+          title: article.title,
+          slug: article.slug,
+          imageUrl: article.imageUrl,
+          content: article.content,
+        }
+      : {
+          isPublished: false,
+          topic: "",
+          title: "",
+          slug: "",
+          imageUrl: "",
+          content: "<p>Start writing your article <b>here</b></p>",
+        },
 
     validate: {},
   });
+
+  // const handleImageUpload = useCallback(
+  //   (file: File): Promise<string> =>
+  //     new Promise((resolve, reject) => {
+  //       const formData = new FormData();
+  //       formData.append("image", file);
+
+  //       fetch("https://api.imgur.com/3/upload", {
+  //         headers: {
+  //           Authorization: `Client-ID ${process.env.NEXT_PUBLIC_IMAGUR_ID}`,
+  //         },
+  //         method: "POST",
+  //         body: formData,
+  //       })
+  //         .then((response) => response.json())
+  //         .then((result) => {
+  //           console.log(result.data);
+  //           return resolve(result.data.url);
+  //         })
+  //         .catch(() => reject(new Error("Upload failed")));
+  //     }),
+  //   []
+  // );
+
+  const isLoading =
+    mode === "Create" ? addMutation.isLoading : editMutation.isLoading;
+
+  const handleSubmit =
+    mode === "Create"
+      ? form.onSubmit((data) => addMutation.mutate(data))
+      : form.onSubmit((data) =>
+          editMutation.mutate({ ...data, id: Number(article?.id) })
+        );
 
   return (
     <Modal
       radius={"lg"}
       title={`${mode} an article`}
-      size={"lg"}
+      size={"xl"}
       onClose={close}
       opened={opened}
       closeOnClickOutside={false}
       styles={{ title: { fontWeight: "bold", fontSize: 24 } }}
     >
-      <form onSubmit={form.onSubmit((data) => mutate(data))}>
+      <LoadingOverlay
+        loaderProps={{ color: "dark" }}
+        visible={isLoading}
+        overlayColor="#111"
+        overlayBlur={2}
+      />
+      <form onSubmit={handleSubmit}>
         <Stack mt={48}>
           <Group grow>
             <TextInput
@@ -77,12 +150,15 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
               label="Title"
               required
               {...form.getInputProps("title")}
+              error={form.errors.title}
             />
             <Select
+              color="dark"
               radius={"md"}
               label="Topic"
               required
               {...form.getInputProps("topic")}
+              error={form.errors.topic}
               data={[
                 Topic.blockcain,
                 Topic.crypto,
@@ -97,18 +173,23 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             label="Slug"
             required
             {...form.getInputProps("slug")}
+            error={form.errors.slug}
           />
           <TextInput
             radius={"md"}
             label="image URL"
             required
             {...form.getInputProps("imageUrl")}
+            error={form.errors?.imageUrl}
           />
           <Switch
             color={"dark"}
             label="Publish"
             {...form.getInputProps("isPublished")}
+            error={form.errors.isPublished}
+            defaultChecked={article?.isPublished}
           />
+
           <RichTextEditor
             sx={{ minHeight: 300 }}
             radius={"md"}
@@ -116,8 +197,10 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             onChange={(value) => {
               form.setFieldValue("content", value);
             }}
+            // onImageUpload={handleImageUpload}
             value={form.values.content}
           />
+
           <Group mt={"md"} position="right">
             <Button
               onClick={close}
@@ -133,7 +216,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
               radius={"md"}
               color={"dark"}
             >
-              Create
+              {mode}
             </Button>
           </Group>
         </Stack>

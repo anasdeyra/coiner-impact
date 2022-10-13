@@ -1,2 +1,4 @@
 export { infiniteScroll } from "./procedure/infiniteScroll";
-export { addArticle } from "./procedure/addArticle";
+export { add } from "./procedure/add";
+export { pusblish } from "./procedure/publish";
+export { edit } from "./procedure/edit";
