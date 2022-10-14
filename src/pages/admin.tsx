@@ -10,6 +10,7 @@ import {
   Button,
   Box,
   createStyles,
+  Skeleton,
   Stack,
 } from "@mantine/core";
 import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
@@ -34,7 +35,7 @@ export default function admin() {
 
   const trpcContext = trpc.useContext();
 
-  const articlesQuery = trpc.article.infiniteScroll.useQuery({});
+  const articlesQuery = trpc.article.getMyArticles.useQuery();
 
   const publishMutation = trpc.article.pusblish.useMutation({
     onMutate({ id }) {
@@ -132,11 +133,13 @@ export default function admin() {
             </Box>
           ))}
       </SimpleGrid>
-      <ArticleModal
-        mode="Create"
-        close={articleModalHandlers.close}
-        opened={articleModalIsOpened}
-      />
+      {articleModalIsOpened && (
+        <ArticleModal
+          mode="Create"
+          close={articleModalHandlers.close}
+          opened={articleModalIsOpened}
+        />
+      )}
     </>
   );
 }

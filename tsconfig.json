@@ -20,7 +20,8 @@
       "@/pages/*": ["src/pages/*"],
       "@/public/*": ["public/*"],
       "@/trpc/*": ["src/trpc/*"],
-      "@db": ["src/db"]
+      "@db": ["src/db"],
+      "@const": ["src/const"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types.d.ts"],

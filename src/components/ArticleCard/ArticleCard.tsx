@@ -5,7 +5,6 @@ import {
   Box,
   Card,
   Group,
-  Image,
   Stack,
   Text,
   AspectRatio,
@@ -25,6 +24,7 @@ export default function ArticleCard({
   title,
   isPublished,
   withAuthor = false,
+  authorId,
 }: ArticleCardProps) {
   const link = isPublished
     ? `/article/${title.toLowerCase().replaceAll(" ", "-")}`
@@ -64,9 +64,9 @@ export default function ArticleCard({
             <Group align={"center"} spacing={10} position={"center"}>
               <Text size={14} color={"dimmed"} weight="normal">
                 By{" "}
-                <Link passHref href={`/profile/${author.id}`}>
+                <Link passHref href={`/profile/${authorId}`}>
                   <Text
-                    component="a"
+                    component={NextLink}
                     variant="link"
                     sx={{ display: "inline", color: "#111" }}
                     weight={700}

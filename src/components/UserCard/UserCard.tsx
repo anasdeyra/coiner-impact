@@ -1,4 +1,5 @@
 import { Avatar, Box, Button, Group, Paper, Stack, Text } from "@mantine/core";
+import { NextLink } from "@mantine/next";
 import Link from "next/link";
 import React from "react";
 
@@ -41,7 +42,7 @@ export default function UserCard({
 
         <Link href={`/profile/${id}`} passHref>
           <Button
-            component="a"
+            component={NextLink}
             mt={32}
             sx={{
               width: "80%",

@@ -42,7 +42,7 @@ export const getStaticProps = async (ctx: any) => {
 
   return {
     props: { ...JSON.parse(JSON.stringify(article)) },
-    revalidate: 600,
+    // revalidate: 600, // ISG 10 mins
   };
 };
 

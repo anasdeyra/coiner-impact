@@ -19,7 +19,7 @@ const useStyles = createStyles((t) => ({
     top: 0,
     right: 0,
     fontWeight: "bold",
-    boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+    "&>button": { boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px" },
     margin: `${t.spacing.md}px ${t.spacing.md}px 0 0`,
   },
 }));
@@ -36,12 +36,14 @@ export default function AdminOptions({
   const [delPopOpened, delPopHandlers] = useDisclosure(false);
   return (
     <>
-      <ArticleModal
-        close={close}
-        opened={opened}
-        article={article}
-        mode="Edit"
-      />
+      {opened && (
+        <ArticleModal
+          close={close}
+          opened={opened}
+          article={article}
+          mode="Edit"
+        />
+      )}
       <Stack spacing={"xs"} className={classes.stack}>
         <Tooltip label="edit">
           <ActionIcon

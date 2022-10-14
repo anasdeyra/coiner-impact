@@ -15,7 +15,6 @@ import { trpc } from "@/trpc/hook";
 import { useForm } from "@mantine/form";
 import dynamic from "next/dynamic";
 import { Article, Topic } from "@prisma/client";
-import { FiCheck, FiX } from "react-icons/fi";
 import showNotification from "src/utils/showNotification";
 // import { useCallback } from "react";
 
@@ -121,9 +120,11 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
 
   const handleSubmit =
     mode === "Create"
-      ? form.onSubmit((data) => addMutation.mutate(data))
-      : form.onSubmit((data) =>
-          editMutation.mutate({ ...data, id: Number(article?.id) })
+      ? form.onSubmit((data) => form.isDirty() && addMutation.mutate(data))
+      : form.onSubmit(
+          (data) =>
+            form.isDirty() &&
+            editMutation.mutate({ ...data, id: Number(article?.id) })
         );
 
   return (
@@ -145,8 +146,8 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             radius={"md"}
             loaderProps={{ color: "dark" }}
             visible={isLoading}
-            overlayColor="#111"
-            overlayBlur={2}
+            overlayColor="#666"
+            overlayBlur={1}
           />
           <Group grow>
             <TextInput
@@ -218,6 +219,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             type="submit"
             radius={"md"}
             color={"dark"}
+            disabled={!form.isDirty()}
           >
             {mode}
           </Button>
