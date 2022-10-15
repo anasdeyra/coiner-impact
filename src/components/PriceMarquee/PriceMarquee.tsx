@@ -58,6 +58,7 @@ export default function PriceMarquee({
           borderRadius: "32px",
           overflow: "hidden",
           border: "1px solid #F5F5F5",
+          background: "white",
         }}
         gradientWidth={0}
       >

@@ -27,7 +27,7 @@ export default function ArticleCard({
   authorId,
 }: ArticleCardProps) {
   const link = isPublished
-    ? `/article/${title.toLowerCase().replaceAll(" ", "-")}`
+    ? `/article/${title?.toLowerCase().replaceAll(" ", "-")}`
     : "#";
   return (
     <Card sx={{ background: "transparent", overflow: "visible" }} p={0} pb="md">
@@ -54,7 +54,7 @@ export default function ArticleCard({
         <Text color={"dimmed"} weight={"bold"} size={"sm"} mt={8}>
           {slug}
         </Text>
-        {withAuthor && (
+        {author && withAuthor && (
           <Group spacing={14} mt={16} align={"center"}>
             <Avatar //@ts-ignore
               radius={"50%"}
@@ -70,6 +70,7 @@ export default function ArticleCard({
                     variant="link"
                     sx={{ display: "inline", color: "#111" }}
                     weight={700}
+                    href="#"
                   >
                     {author.name}
                   </Text>
@@ -94,7 +95,7 @@ export default function ArticleCard({
   );
 }
 
-export interface ArticleCardProps extends Article {
-  author: User;
+export interface ArticleCardProps extends Partial<Article> {
+  author?: User;
   withAuthor?: boolean;
 }

@@ -10,7 +10,7 @@ export default function ArticleOfTheDay({
   small = false,
 }: ArticleCardProps & { small?: boolean }) {
   const { ref, height } = useElementSize();
-  const link = `/article/${title.toLowerCase().replaceAll(" ", "-")}`;
+  const link = `/article/${title?.toLowerCase().replaceAll(" ", "-")}`;
   if (small)
     return (
       <Card radius={20} sx={{ backgroundColor: "#111", overflow: "visible" }}>

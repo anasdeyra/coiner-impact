@@ -1,70 +1,38 @@
-import {
-  ActionIcon,
-  Avatar,
-  Menu,
-  Divider,
-  Group,
-  Header as H,
-  Button,
-} from "@mantine/core";
+import { ActionIcon, Avatar, Group, Header as H, Button } from "@mantine/core";
 
 import {
   FiSearch as SearchIcon,
   FiBookmark,
   FiMenu,
   FiBell,
-  FiLogOut,
-  FiUser,
-  FiSettings,
-  FiPlusCircle,
-  FiBarChart2 as FiActivity,
 } from "react-icons/fi";
 import { useSession, signOut } from "next-auth/react";
+import { useMediaQuery } from "@mantine/hooks";
+import UserMenu from "./UserMenu";
 import { NextLink } from "@mantine/next";
 
 export default function Header() {
   const { data } = useSession();
+  const isSmall = useMediaQuery("(max-width: 992px)", false, {
+    getInitialValueInEffect: true,
+  });
   return (
-    <H p={16} withBorder={false} pb={0} height={55 + 16}>
+    <H
+      sx={!isSmall ? { display: "none" } : {}}
+      m={16}
+      mt={0}
+      pt={16}
+      height={isSmall ? 55 + 16 : 0}
+    >
       <Group position="apart">
         {data ? (
-          <Menu radius={"lg"} position="bottom-start">
-            <Menu.Target>
-              <Avatar
-                component="button"
-                //@ts-ignore
-                radius={"50%"}
-                size={"md"}
-                src={data.user?.image}
-                sx={{ cursor: "pointer" }}
-              />
-            </Menu.Target>
-            <Menu.Dropdown>
-              <Menu.Label>Actions</Menu.Label>
-              <Menu.Item icon={<FiUser />}>Profile</Menu.Item>
-              <Menu.Item icon={<FiPlusCircle />}>New Article</Menu.Item>
-              {data.user.role === "admin" && (
-                <Menu.Item
-                  icon={<FiActivity />}
-                  component={NextLink}
-                  href="admin"
-                >
-                  Admin Dashboard
-                </Menu.Item>
-              )}
-              <Menu.Item icon={<FiSettings />}>Settings</Menu.Item>
-              <Menu.Divider />
-              <Menu.Item
-                icon={<FiLogOut />}
-                color={"red"}
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                logout
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
+          <UserMenu>
+            <Avatar // @ts-ignore
+              radius={"50%"}
+              sx={{ cursor: "pointer" }}
+              src={data.user.image}
+            ></Avatar>
+          </UserMenu>
         ) : (
           <Button
             radius={"xl"}
@@ -95,7 +63,6 @@ export default function Header() {
           </ActionIcon>
         </Group>
       </Group>
-      <Divider color={"#dbdbdb"} size={"xs"} mt={18} orientation="horizontal" />
     </H>
   );
 }

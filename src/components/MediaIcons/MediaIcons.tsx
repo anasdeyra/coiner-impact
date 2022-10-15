@@ -15,7 +15,7 @@ export default function MediaIcons() {
     <>
       {MEDIAS.map(({ Icon, link, color }, i) => (
         <Link key={i} passHref href={link}>
-          <ActionIcon variant="transparent" size={"sm"}>
+          <ActionIcon variant="light" radius={"xl"}>
             <Icon size={16} color={color} />
           </ActionIcon>
         </Link>

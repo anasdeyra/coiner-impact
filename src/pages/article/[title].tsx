@@ -34,7 +34,7 @@ export default function Article({
 
 export const getStaticProps = async (ctx: any) => {
   let title: string | undefined = ctx.params?.title;
-  title = title?.replaceAll("-", " ");
+  title = title?.toLowerCase().replaceAll("-", " ");
   const article = await prisma.article.findFirst({
     where: { title, isPublished: true },
     include: { author: true },
@@ -50,7 +50,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   const titles = await prisma.article.findMany({ select: { title: true } });
 
   const paths = titles.map(({ title }) => ({
-    params: { title: title.replaceAll(" ", "-") },
+    params: { title: title.toLowerCase().replaceAll(" ", "-") },
   }));
   return {
     paths,

@@ -73,10 +73,10 @@ model Article {
   publishedAt     DateTime
   author          User             @relation(fields: [authorId], references: [id])
   authorId        String
-  Futured_Article Futured_Article?
+  Featured_Article Featured_Article?
 }
 
-model Futured_Article {
+model Featured_Article {
   articleId Int      @unique
   featured  Featured @id
   article   Article  @relation(fields: articleId, references: id)

@@ -2,36 +2,53 @@ import {
   Group,
   Stack,
   Avatar,
-  Indicator,
   Text,
   ActionIcon,
+  Skeleton,
 } from "@mantine/core";
+import { NextLink } from "@mantine/next";
+import { useSession } from "next-auth/react";
 import { BiDotsVerticalRounded } from "react-icons/bi";
+import UserMenu from "../Appshell/Header/UserMenu";
 
 export default function MainUser() {
+  const { data, status } = useSession();
+  if (status === "loading") return <Skeleton></Skeleton>;
+  if (!data) return null;
   return (
     <Group align="start">
-      <Indicator size={8} color={"green"} position="bottom-end">
-        <Avatar
-          size={48}
-          // @ts-ignore
-          radius={"50%"}
-          src={
-            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60"
-          }
-        />
-      </Indicator>
-      <Stack sx={{ flexGrow: 1 }} spacing={0}>
-        <Text size={"sm"} weight={"bold"}>
-          Anas Deyra
+      <Avatar
+        component={NextLink}
+        href={`#`}
+        size={42}
+        // @ts-ignore
+        radius={"50%"}
+        src={data.user.image}
+      />
+
+      <Stack
+        justify={"space-between"}
+        align="start"
+        sx={{ flexGrow: 1 }}
+        spacing={0}
+      >
+        <Text component={NextLink} href={`#`} size={"sm"} weight={700}>
+          {data.user.name}
         </Text>
-        <Text size={"xs"} color={"dimmed"}>
-          Admin
+        <Text
+          sx={{ textTransform: "capitalize" }}
+          weight={500}
+          size={"xs"}
+          color={"dimmed"}
+        >
+          {data.user.role}
         </Text>
       </Stack>
-      <ActionIcon variant="transparent">
-        <BiDotsVerticalRounded />
-      </ActionIcon>
+      <UserMenu>
+        <ActionIcon variant="transparent">
+          <BiDotsVerticalRounded />
+        </ActionIcon>
+      </UserMenu>
     </Group>
   );
 }

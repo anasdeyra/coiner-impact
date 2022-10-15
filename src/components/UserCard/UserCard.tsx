@@ -43,6 +43,7 @@ export default function UserCard({
         <Link href={`/profile/${id}`} passHref>
           <Button
             component={NextLink}
+            href={"#"}
             mt={32}
             sx={{
               width: "80%",

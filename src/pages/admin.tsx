@@ -104,10 +104,11 @@ export default function admin() {
       </Group>
       <SimpleGrid
         breakpoints={[
+          { minWidth: "xs", cols: 2 },
           { minWidth: "sm", cols: 2 },
-          { minWidth: "md", cols: 3 },
-          { minWidth: "lg", cols: 4 },
-          { minWidth: "xl", cols: 5 },
+          { minWidth: "md", cols: 2 },
+          { minWidth: "lg", cols: 3 },
+          { minWidth: "xl", cols: 2 },
         ]}
         mt={48}
         spacing={"xl"}
@@ -115,7 +116,7 @@ export default function admin() {
         {articlesQuery.data &&
           articlesQuery.data.map((props) => (
             <Box key={props.id} className={classes.wrapper}>
-              <ArticleCard {...props} />
+              <ArticleCard {...props} slug="" />
               <AdminOptions
                 article={props}
                 isDeleting={

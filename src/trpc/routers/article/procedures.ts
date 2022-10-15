@@ -4,3 +4,5 @@ export { pusblish } from "./procedure/publish";
 export { edit } from "./procedure/edit";
 export { del } from "./procedure/del";
 export { getAllPublished } from "./procedure/getAllPublished";
+export { getFeatured } from "./procedure/getFeatured";
+export { setFeatured } from "./procedure/setFeatured";
