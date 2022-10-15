@@ -1,15 +1,46 @@
 import { Box, Stack, Title, MediaQuery } from "@mantine/core";
-import PriceMarquee from "../components/PriceMarquee/PriceMarquee";
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
 import { InferGetServerSidePropsType } from "next";
 import { createContext } from "@/trpc/context";
 import { articleCaller } from "@/trpc/routers/article/articleRouter";
+import dynamic from "next/dynamic";
+import { SEO } from "@const";
+import Head from "next/head";
+
+const PriceMarquee = dynamic(
+  () => import("../components/PriceMarquee/PriceMarquee")
+);
 
 const Home = ({
   featured,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
+      <Head>
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={SEO.website} />
+        <meta property="og:title" content={SEO.title} />
+        <meta property="og:description" content={SEO.description} />
+        {/* <meta
+          property="og:image"
+          content={
+            "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/advisor/in/wp-content/uploads/2022/03/pexels-pixabay-315788-scaled.jpg"
+          }
+        /> */}
+        <meta property="og:site_name" content={SEO.title} />
+        {/* twitter tags */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content={SEO.twitterhandler} />
+        <meta name="twitter:title" content={SEO.title} />
+        <meta name="twitter:description" content={SEO.description} />
+        <meta name="twitter:creator" content={SEO.twitterhandler} />
+        {/* <meta
+          name="twitter:image"
+          content={
+            "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/advisor/in/wp-content/uploads/2022/03/pexels-pixabay-315788-scaled.jpg"
+          }
+        /> */}
+      </Head>
       <PriceMarquee />
       <Stack mt={48} spacing={72}>
         <Box>

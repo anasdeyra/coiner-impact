@@ -13,7 +13,7 @@ export default function Navbar() {
       <N p={16} width={{ sm: 0, md: 72 }}>
         <N.Section>
           <NextLink href={"/"}>
-            <Image src={"/favicon.ico"} height={40} width={40} />
+            <Image alt="logo" src={"/favicon.ico"} height={40} width={40} />
           </NextLink>
         </N.Section>
         <N.Section grow sx={{ alignContent: "center" }}>

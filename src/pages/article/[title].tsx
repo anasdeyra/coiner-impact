@@ -21,6 +21,7 @@ export default function Article({
         <Head>
           {/* basic OG */}
           <title>{title}</title>
+          <meta name="description" content={slug} />
           <meta
             property="og:url"
             content={`https://coiner-impact.com/article/${title
