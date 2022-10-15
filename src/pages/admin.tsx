@@ -10,14 +10,17 @@ import {
   Button,
   Box,
   createStyles,
-  Skeleton,
   Stack,
+  MediaQuery,
+  Skeleton,
 } from "@mantine/core";
 import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
 import { useDisclosure } from "@mantine/hooks";
 import showNotification from "src/utils/showNotification";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import AotD from "@/components/ArticleCard/ArticleOfTheDay";
+import article from "@/trpc/routers/article/articleRouter";
 const AdminOptions = dynamic(
   () => import("@/components/ArticleCard/AdminOptions"),
   { ssr: false }
@@ -35,7 +38,10 @@ export default function admin() {
 
   const trpcContext = trpc.useContext();
 
-  const articlesQuery = trpc.article.getMyArticles.useQuery();
+  const articlesQuery = trpc.article.getMyArticles.useQuery(
+    {},
+    { trpc: { ssr: false } }
+  );
 
   const publishMutation = trpc.article.pusblish.useMutation({
     onMutate({ id }) {
@@ -54,6 +60,30 @@ export default function admin() {
         title: `There was a problem ${
           isPublished ? "publishing" : "unpublishing"
         } an article`,
+        message: `Article id: ${id}`,
+        isError: true,
+      });
+    },
+  });
+
+  //feature logic
+  const featureQuery = trpc.article.getFeatured.useQuery(undefined, {
+    trpc: { ssr: false },
+  });
+
+  const featureMutation = trpc.article.setFeatured.useMutation({
+    onMutate({ id }) {
+      setSelectedArticle(id);
+    },
+    onSuccess() {
+      showNotification({
+        title: `Article was featured successfully!`,
+      });
+      trpcContext.article.invalidate();
+    },
+    onError(_, { id }) {
+      showNotification({
+        title: `There was a problem featured an article`,
         message: `Article id: ${id}`,
         isError: true,
       });
@@ -86,62 +116,125 @@ export default function admin() {
     deleteMutation.mutate({ id });
   };
 
+  const featureHandler = (id: number) => () => {
+    featureMutation.mutate({ id });
+  };
+
   return (
-    <>
-      <Group mt={48} position="apart">
-        <Text weight={"bold"} size={28}>
-          My Articles {articlesQuery.data && `(${articlesQuery.data.length})`}
+    <Stack spacing={72}>
+      <Box>
+        <Text mb={32} size={28} weight="bold">
+          Featured Article
         </Text>
-        <Button
-          onClick={() => {
-            articleModalHandlers.open();
-          }}
-          radius={"xl"}
-          color={"dark"}
+        {featureQuery.isLoading && (
+          <Skeleton width={"100%"} height={400} radius={"lg"} animate />
+        )}
+        {featureQuery.data && (
+          <Box className={classes.wrapper}>
+            <MediaQuery largerThan={"lg"} styles={{ display: "none" }}>
+              <div>
+                <AotD small {...featureQuery.data.article} />
+              </div>
+            </MediaQuery>
+            <MediaQuery smallerThan={"lg"} styles={{ display: "none" }}>
+              <div>
+                <AotD {...featureQuery.data.article} />
+              </div>
+            </MediaQuery>
+            <AdminOptions
+              article={featureQuery.data.article}
+              isDeleting={
+                deleteMutation.isLoading &&
+                selectedArticle === featureQuery.data.articleId
+              }
+              deleteHandler={deleteHandler(featureQuery.data.articleId)}
+              isPublishing={
+                publishMutation.isLoading &&
+                selectedArticle === featureQuery.data.articleId
+              }
+              publishHandler={publishHandler({
+                id: featureQuery.data.articleId,
+                isPublished: !featureQuery.data.article.isPublished,
+              })}
+              isFeatured={
+                featureQuery.data.articleId === featureQuery.data?.articleId
+              }
+              isFeaturing={
+                featureMutation.isLoading &&
+                selectedArticle === featureQuery.data.articleId
+              }
+              featureHandler={featureHandler(featureQuery.data.articleId)}
+            />
+          </Box>
+        )}
+      </Box>
+      <Box>
+        <Group mt={48} position="apart">
+          <Text weight={"bold"} size={28}>
+            My Articles {articlesQuery.data && `(${articlesQuery.data.length})`}
+          </Text>
+          <Button
+            onClick={() => {
+              articleModalHandlers.open();
+            }}
+            radius={"xl"}
+            color={"dark"}
+          >
+            Create
+          </Button>
+        </Group>
+        <SimpleGrid
+          breakpoints={[
+            { minWidth: "xs", cols: 2 },
+            { minWidth: "lg", cols: 3 },
+            { minWidth: "xl", cols: 4 },
+          ]}
+          mt={48}
+          spacing={"xl"}
         >
-          Create
-        </Button>
-      </Group>
-      <SimpleGrid
-        breakpoints={[
-          { minWidth: "xs", cols: 2 },
-          { minWidth: "sm", cols: 2 },
-          { minWidth: "md", cols: 2 },
-          { minWidth: "lg", cols: 3 },
-          { minWidth: "xl", cols: 2 },
-        ]}
-        mt={48}
-        spacing={"xl"}
-      >
-        {articlesQuery.data &&
-          articlesQuery.data.map((props) => (
-            <Box key={props.id} className={classes.wrapper}>
-              <ArticleCard {...props} slug="" />
-              <AdminOptions
-                article={props}
-                isDeleting={
-                  deleteMutation.isLoading && selectedArticle === props.id
-                }
-                isPublishing={
-                  publishMutation.isLoading && selectedArticle === props.id
-                }
-                publishHandler={publishHandler({
-                  id: props.id,
-                  isPublished: !props.isPublished,
-                })}
-                deleteHandler={deleteHandler(props.id)}
-              />
-            </Box>
-          ))}
-      </SimpleGrid>
-      {articleModalIsOpened && (
-        <ArticleModal
-          mode="Create"
-          close={articleModalHandlers.close}
-          opened={articleModalIsOpened}
-        />
-      )}
-    </>
+          {articlesQuery.isLoading && (
+            <>
+              <Skeleton width={"100%"} height={180} radius={"lg"} animate />
+              <Skeleton width={"100%"} height={180} radius={"lg"} animate />
+              <Skeleton width={"100%"} height={180} radius={"lg"} animate />
+              <Skeleton width={"100%"} height={180} radius={"lg"} animate />
+            </>
+          )}
+          {articlesQuery.data &&
+            articlesQuery.data.map((props) => (
+              <Box key={props.id} className={classes.wrapper}>
+                <ArticleCard {...props} slug="" />
+                <AdminOptions
+                  article={props}
+                  isDeleting={
+                    deleteMutation.isLoading && selectedArticle === props.id
+                  }
+                  deleteHandler={deleteHandler(props.id)}
+                  isPublishing={
+                    publishMutation.isLoading && selectedArticle === props.id
+                  }
+                  publishHandler={publishHandler({
+                    id: props.id,
+                    isPublished: !props.isPublished,
+                  })}
+                  isFeatured={props.id === featureQuery.data?.articleId}
+                  isFeaturing={
+                    featureMutation.isLoading && selectedArticle === props.id
+                  }
+                  featureHandler={featureHandler(props.id)}
+                />
+              </Box>
+            ))}
+        </SimpleGrid>
+        {articleModalIsOpened && (
+          <ArticleModal
+            mode="Create"
+            close={articleModalHandlers.close}
+            opened={articleModalIsOpened}
+          />
+        )}
+      </Box>
+    </Stack>
   );
 }
 

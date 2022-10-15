@@ -1,13 +1,16 @@
 import { GetStaticPaths } from "next";
 import prisma from "@db";
 import { Article as Ar, User } from "@prisma/client";
-import { Title, AspectRatio } from "@mantine/core";
+import { Title, AspectRatio, Space } from "@mantine/core";
 import Content from "@/components/Content";
+import AuthorCredits from "@/components/AuthorCredits/AuthorCredits";
 
 export default function Article({
   content,
   title,
   imageUrl,
+  author,
+  publishedAt,
 }: Ar & { author: User }) {
   return (
     <>
@@ -27,6 +30,8 @@ export default function Article({
           alt={title}
         />
       </AspectRatio>
+      {author && <AuthorCredits author={author} publishedAt={publishedAt} />}
+      <Space mt={16} />
       <Content content={content} />
     </>
   );
@@ -39,7 +44,6 @@ export const getStaticProps = async (ctx: any) => {
     where: { title, isPublished: true },
     include: { author: true },
   });
-
   return {
     props: { ...JSON.parse(JSON.stringify(article)) },
     // revalidate: 600, // ISG 10 mins

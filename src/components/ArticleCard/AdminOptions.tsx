@@ -10,7 +10,7 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Article, User } from "@prisma/client";
-import { MdPublish, MdEdit, MdDelete } from "react-icons/md";
+import { MdPublish, MdEdit, MdDelete, MdStar } from "react-icons/md";
 import ArticleModal from "../Modals/ArticleModal/ArticleModal";
 
 const useStyles = createStyles((t) => ({
@@ -30,6 +30,9 @@ export default function AdminOptions({
   article,
   isPublishing,
   isDeleting,
+  isFeatured = false,
+  featureHandler,
+  isFeaturing,
 }: Props) {
   const { classes } = useStyles();
   const [opened, { close, open }] = useDisclosure(false);
@@ -45,6 +48,20 @@ export default function AdminOptions({
         />
       )}
       <Stack spacing={"xs"} className={classes.stack}>
+        {!isFeatured && (
+          <Tooltip label="feature">
+            <ActionIcon
+              variant="filled"
+              color="green"
+              onClick={() => {
+                featureHandler();
+              }}
+              loading={isFeaturing}
+            >
+              <MdStar />
+            </ActionIcon>
+          </Tooltip>
+        )}
         <Tooltip label="edit">
           <ActionIcon
             variant="filled"
@@ -119,7 +136,10 @@ export default function AdminOptions({
 interface Props {
   publishHandler: () => void;
   deleteHandler: () => void;
+  featureHandler: () => void;
   article: Article & { author: User };
   isPublishing: boolean;
   isDeleting: boolean;
+  isFeatured?: boolean;
+  isFeaturing?: boolean;
 }

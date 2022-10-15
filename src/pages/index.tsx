@@ -18,12 +18,12 @@ const Home = ({
           </Title>
           {featured && (
             <>
-              <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+              <MediaQuery largerThan={"lg"} styles={{ display: "none" }}>
                 <div>
                   <AotD small {...featured.article} />
                 </div>
               </MediaQuery>
-              <MediaQuery smallerThan={"sm"} styles={{ display: "none" }}>
+              <MediaQuery smallerThan={"lg"} styles={{ display: "none" }}>
                 <div>
                   <AotD {...featured.article} />
                 </div>
@@ -44,7 +44,8 @@ const Home = ({
 export const getServerSideProps = async ({ req, res }) => {
   //@ts-ignore: see u later
   const context = await createContext({ req, res });
-  const featured = await articleCaller(context).getFeatured();
+  const response = await articleCaller(context).getFeatured();
+  const featured: typeof response = JSON.parse(JSON.stringify(response));
   return {
     props: { featured },
   };

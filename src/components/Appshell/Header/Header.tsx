@@ -19,12 +19,15 @@ export default function Header() {
   return (
     <H
       sx={!isSmall ? { display: "none" } : {}}
-      m={16}
-      mt={0}
-      pt={16}
+      px={16}
       height={isSmall ? 55 + 16 : 0}
+      withBorder={false}
     >
-      <Group position="apart">
+      <Group
+        sx={{ borderBottom: "1px solid #e9ecef" }}
+        py={16}
+        position="apart"
+      >
         {data ? (
           <UserMenu>
             <Avatar // @ts-ignore

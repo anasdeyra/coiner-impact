@@ -1,9 +1,10 @@
 import { NAVICONS } from "@const";
-import { MediaQuery, Navbar as N, Stack } from "@mantine/core";
+import { MediaQuery, Navbar as N, Stack, Box } from "@mantine/core";
 import NavIcon from "@/components/NavIcon/NavIcon";
 import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 import { NextLink } from "@mantine/next";
+import { signOut } from "next-auth/react";
 
 export default function Navbar() {
   return (
@@ -22,7 +23,13 @@ export default function Navbar() {
           </Stack>
         </N.Section>
         <N.Section>
-          <NavIcon Icon={FiLogOut} link={"/api/auth/signout"} />
+          <Box
+            onClick={() => {
+              signOut();
+            }}
+          >
+            <NavIcon Icon={FiLogOut} />
+          </Box>
         </N.Section>
       </N>
     </MediaQuery>

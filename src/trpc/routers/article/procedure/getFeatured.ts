@@ -5,7 +5,7 @@ export const getFeatured = publicProcedure.query(async ({ ctx }) => {
   const article = await prisma.featured_Article.findFirst({
     where: { featured: "featured" },
     select: {
-      article: { select: { title: true, imageUrl: true, slug: true } },
+      article: { include: { author: true } },
       articleId: true,
     },
   });

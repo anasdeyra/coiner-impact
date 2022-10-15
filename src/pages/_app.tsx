@@ -23,8 +23,8 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           withGlobalStyles
           withNormalizeCSS
           theme={{
-            fontFamily: "Open Sans",
-            headings: { fontFamily: "Open Sans" },
+            fontFamily: "Open Sans, sans-serif",
+            headings: { fontFamily: "Open Sans, sans-serif" },
           }}
         >
           <Global

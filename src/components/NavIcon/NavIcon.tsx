@@ -8,14 +8,25 @@ export default function Component({
   link,
 }: {
   Icon: IconType;
-  link: string;
+  link?: string;
 }) {
   const { pathname } = useRouter();
   const isActive = pathname === link;
+  if (link)
+    return (
+      <ActionIcon
+        component={NextLink}
+        href={link}
+        radius={8}
+        sx={isActive ? { boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.25)" } : {}}
+        variant="transparent"
+        size={40}
+      >
+        <Icon color="#111" size={28} />
+      </ActionIcon>
+    );
   return (
     <ActionIcon
-      component={NextLink}
-      href={link}
       radius={8}
       sx={isActive ? { boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.25)" } : {}}
       variant="transparent"

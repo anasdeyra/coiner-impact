@@ -1,5 +1,5 @@
-import relativeTime from "dayjs/plugin/relativeTime";
-import dayjs from "dayjs";
+import AuthorCredits from "../AuthorCredits/AuthorCredits";
+
 import {
   Avatar,
   Box,
@@ -9,12 +9,9 @@ import {
   Text,
   AspectRatio,
 } from "@mantine/core";
-import Link from "next/link";
 import React from "react";
 import { Article, User } from "@prisma/client";
 import { NextLink } from "@mantine/next";
-
-dayjs.extend(relativeTime);
 
 export default function ArticleCard({
   author,
@@ -24,7 +21,6 @@ export default function ArticleCard({
   title,
   isPublished,
   withAuthor = false,
-  authorId,
 }: ArticleCardProps) {
   const link = isPublished
     ? `/article/${title?.toLowerCase().replaceAll(" ", "-")}`
@@ -55,40 +51,7 @@ export default function ArticleCard({
           {slug}
         </Text>
         {author && withAuthor && (
-          <Group spacing={14} mt={16} align={"center"}>
-            <Avatar //@ts-ignore
-              radius={"50%"}
-              size={"sm"}
-              src={author.image}
-            ></Avatar>
-            <Group align={"center"} spacing={10} position={"center"}>
-              <Text size={14} color={"dimmed"} weight="normal">
-                By{" "}
-                <Link passHref href={`/profile/${authorId}`}>
-                  <Text
-                    component={NextLink}
-                    variant="link"
-                    sx={{ display: "inline", color: "#111" }}
-                    weight={700}
-                    href="#"
-                  >
-                    {author.name}
-                  </Text>
-                </Link>
-              </Text>
-              <Box
-                sx={{
-                  borderRadius: "50%",
-                  background: "#868E96",
-                  width: "6px",
-                  height: "6px",
-                }}
-              />
-              <Text size={14} color={"dimmed"} weight="normal">
-                {dayjs(publishedAt).fromNow()}
-              </Text>
-            </Group>
-          </Group>
+          <AuthorCredits publishedAt={publishedAt ?? "now"} author={author} />
         )}
       </Stack>
     </Card>
