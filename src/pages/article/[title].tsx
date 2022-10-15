@@ -4,16 +4,54 @@ import { Article as Ar, User } from "@prisma/client";
 import { Title, AspectRatio, Space } from "@mantine/core";
 import Content from "@/components/Content";
 import AuthorCredits from "@/components/AuthorCredits/AuthorCredits";
+import Head from "next/head";
 
 export default function Article({
   content,
   title,
   imageUrl,
   author,
+  slug,
   publishedAt,
+  updatedAt,
 }: Ar & { author: User }) {
   return (
     <>
+      <Head>
+        {/* basic OG */}
+        <title>{title}</title>
+        <meta
+          property="og:url"
+          content={`https://coiner-impact.com/article/${title
+            .toLocaleLowerCase()
+            .replaceAll(" ", "-")}`}
+        />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={slug} />
+        <meta property="og:image" content={imageUrl} />
+
+        {/* article OG */}
+
+        <meta property="og:type" content="article" />
+        <meta
+          property="article:published_time"
+          content={publishedAt.toISOString()}
+        />
+        <meta
+          property="article:modified_time"
+          content={updatedAt.toISOString()}
+        />
+        {/* <meta property="article:author" content={title} /> */}
+        {/* <meta property="article:section" content={topic} /> */}
+
+        {/* twitter tags */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@coiner_impact" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={slug} />
+        <meta name="twitter:creator" content="@coiner_impact" />
+        <meta name="twitter:image" content={imageUrl} />
+      </Head>
       <Title order={1} size={32}>
         {title}
       </Title>

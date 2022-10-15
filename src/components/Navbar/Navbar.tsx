@@ -4,9 +4,10 @@ import NavIcon from "@/components/NavIcon/NavIcon";
 import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 import { NextLink } from "@mantine/next";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Navbar() {
+  const { data } = useSession();
   return (
     <MediaQuery smallerThan={"md"} styles={{ display: "none" }}>
       <N p={16} width={{ sm: 0, md: 72 }}>
@@ -22,15 +23,17 @@ export default function Navbar() {
             ))}
           </Stack>
         </N.Section>
-        <N.Section>
-          <Box
-            onClick={() => {
-              signOut();
-            }}
-          >
-            <NavIcon Icon={FiLogOut} />
-          </Box>
-        </N.Section>
+        {data && (
+          <N.Section>
+            <Box
+              onClick={() => {
+                signOut();
+              }}
+            >
+              <NavIcon Icon={FiLogOut} />
+            </Box>
+          </N.Section>
+        )}
       </N>
     </MediaQuery>
   );
