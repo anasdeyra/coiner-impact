@@ -1,7 +1,16 @@
-import { MediaQuery, Aside as A, Group, Stack, Button } from "@mantine/core";
+import { COPYRIGHT } from "@const";
+import {
+  MediaQuery,
+  Aside as A,
+  Group,
+  Stack,
+  Button,
+  Text,
+} from "@mantine/core";
 import { useSession, signIn } from "next-auth/react";
 import MainUser from "../MainUser/MainUser";
 import MediaIcons from "../MediaIcons/MediaIcons";
+import Newsletter from "../Newsletter/Newsletter";
 
 export default function Aside() {
   const { data } = useSession();
@@ -22,7 +31,7 @@ export default function Aside() {
         </Stack>
 
         {!data && (
-          <Stack>
+          <Stack mb={48}>
             <Button
               sx={{ boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}
               radius={"xl"}
@@ -45,6 +54,12 @@ export default function Aside() {
             </Button>
           </Stack>
         )}
+
+        <Newsletter />
+
+        <Text mt={48} align="center" size={"xs"} color={"dimmed"}>
+          {COPYRIGHT}
+        </Text>
       </A>
     </MediaQuery>
   );

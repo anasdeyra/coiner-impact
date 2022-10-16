@@ -1,14 +1,6 @@
 import AuthorCredits from "../AuthorCredits/AuthorCredits";
 
-import {
-  Avatar,
-  Box,
-  Card,
-  Group,
-  Stack,
-  Text,
-  AspectRatio,
-} from "@mantine/core";
+import { Box, Card, Stack, Text, AspectRatio } from "@mantine/core";
 import React from "react";
 import { Article, User } from "@prisma/client";
 import { NextLink } from "@mantine/next";
@@ -27,7 +19,7 @@ export default function ArticleCard({
     : "#";
   return (
     <Card sx={{ background: "transparent", overflow: "visible" }} p={0} pb="md">
-      <Stack spacing={0}>
+      <Stack sx={{ height: "100%" }} spacing={0}>
         <NextLink href={link}>
           <AspectRatio ratio={16 / 10} mx="auto">
             <img
@@ -47,12 +39,21 @@ export default function ArticleCard({
         <Text weight={700} size={"lg"} mt={16}>
           {title}
         </Text>
-        <Text color={"dimmed"} weight={"bold"} size={"sm"} mt={8}>
+        <Text
+          mb={withAuthor ? "xs" : 0}
+          color={"dimmed"}
+          weight={"bold"}
+          size={"sm"}
+          mt={8}
+          lineClamp={2}
+        >
           {slug}
         </Text>
-        {author && withAuthor && (
-          <AuthorCredits publishedAt={publishedAt ?? "now"} author={author} />
-        )}
+        <Box mt={"auto"}>
+          {author && withAuthor && (
+            <AuthorCredits publishedAt={publishedAt ?? "now"} author={author} />
+          )}
+        </Box>
       </Stack>
     </Card>
   );

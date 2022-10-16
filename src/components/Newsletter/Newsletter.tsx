@@ -3,7 +3,7 @@ import {
   Text,
   TextInput,
   Button,
-  Group,
+  Stack,
   createStyles,
 } from "@mantine/core";
 
@@ -18,32 +18,21 @@ const useStyles = createStyles((t) => ({
 export default function Newsletter() {
   const { classes } = useStyles();
   return (
-    <Paper sx={{ background: "#111" }} radius={"xl"} p={32}>
-      <Text weight={"bold"} size={48} color={"white"}>
-        Join our newsteller
-      </Text>
-      <Text size={"lg"} mt={"md"} weight={"bold"} color={"#dadada"}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation
-      </Text>
-      <Group mt={48}>
-        <TextInput
-          variant="unstyled"
-          className={classes.input}
-          placeholder="Enter your email here"
-          size="lg"
-          styles={{ input: { color: "white", fontWeight: "bold" } }}
-        />
+    <Paper sx={{ background: "#111" }} radius={"md"} shadow="lg" p={"md"}>
+      <Stack>
+        <Text weight={500} align="center" color={"white"}>
+          Get our best tips. Join the smartest marketers who receive our twice
+          monthly update
+        </Text>
         <Button
-          sx={{ color: "#111", fontWeight: "bold" }}
-          variant="white"
+          sx={{ fontWeight: "bold" }}
           radius={"xl"}
-          size="lg"
+          variant="white"
+          color={"dark"}
         >
-          Join now
+          join news letter
         </Button>
-      </Group>
+      </Stack>
     </Paper>
   );
 }

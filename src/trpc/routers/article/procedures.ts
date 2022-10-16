@@ -6,3 +6,4 @@ export { del } from "./procedure/del";
 export { getAllPublished } from "./procedure/getAllPublished";
 export { getFeatured } from "./procedure/getFeatured";
 export { setFeatured } from "./procedure/setFeatured";
+export { latest } from "./procedure/latest";

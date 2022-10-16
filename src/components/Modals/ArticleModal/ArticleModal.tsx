@@ -16,6 +16,7 @@ import { useForm } from "@mantine/form";
 import dynamic from "next/dynamic";
 import { Article, Topic } from "@prisma/client";
 import showNotification from "src/utils/showNotification";
+import { TOPICS } from "@const";
 // import { useCallback } from "react";
 
 const RichTextEditor = dynamic(() => import("@mantine/rte"), {
@@ -165,13 +166,7 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
               required
               {...form.getInputProps("topic")}
               error={form.errors.topic}
-              data={[
-                Topic.blockcain,
-                Topic.crypto,
-                Topic.cyber,
-                Topic.nft,
-                Topic.web3,
-              ]}
+              data={TOPICS}
               placeholder="Choose a topic"
             />
           </Group>

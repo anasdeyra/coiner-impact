@@ -19,6 +19,11 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7629850326051906"
+          crossOrigin="anonymous"
+        />
       </Head>
       <SessionProvider session={pageProps.session}>
         <MantineProvider

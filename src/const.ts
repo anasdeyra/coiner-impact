@@ -1,3 +1,4 @@
+import { Topic } from "@prisma/client";
 import { MdDashboard, MdExplore, MdCreate, MdSettings } from "react-icons/md";
 
 export const NAVICONS = [
@@ -15,3 +16,13 @@ export const SEO = {
   twitterhandler: "@coiner_impact",
   website: "https://www.coiner-impact.com",
 };
+
+export const TOPICS = [
+  Topic.blockcain,
+  Topic.crypto,
+  Topic.cyber,
+  Topic.nft,
+  Topic.web3,
+];
+
+export const COPYRIGHT = "© 2022 Coiner impact. All rights reserved.";
