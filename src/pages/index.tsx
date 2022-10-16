@@ -21,12 +21,7 @@ const Home = ({
         <meta property="og:url" content={SEO.website} />
         <meta property="og:title" content={SEO.title} />
         <meta property="og:description" content={SEO.description} />
-        {/* <meta
-          property="og:image"
-          content={
-            "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/advisor/in/wp-content/uploads/2022/03/pexels-pixabay-315788-scaled.jpg"
-          }
-        /> */}
+        <meta property="og:image" content={SEO.image} />
         <meta property="og:site_name" content={SEO.title} />
         {/* twitter tags */}
         <meta name="twitter:card" content="summary" />
@@ -34,12 +29,7 @@ const Home = ({
         <meta name="twitter:title" content={SEO.title} />
         <meta name="twitter:description" content={SEO.description} />
         <meta name="twitter:creator" content={SEO.twitterhandler} />
-        {/* <meta
-          name="twitter:image"
-          content={
-            "https://thumbor.forbes.com/thumbor/fit-in/x/https://www.forbes.com/advisor/in/wp-content/uploads/2022/03/pexels-pixabay-315788-scaled.jpg"
-          }
-        /> */}
+        <meta name="twitter:image" content={SEO.image} />
       </Head>
       <PriceMarquee />
       <Stack mt={48} spacing={72}>

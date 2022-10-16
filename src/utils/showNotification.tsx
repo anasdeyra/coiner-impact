@@ -4,7 +4,6 @@ import { FiX, FiCheck } from "react-icons/fi";
 
 export default function showNotification({
   title,
-  message,
   isError = false,
 }: {
   title: string;
@@ -15,6 +14,6 @@ export default function showNotification({
     message: <Text weight={"bold"}>{title}</Text>,
     color: isError ? "red" : "dark",
     icon: isError ? <FiX /> : <FiCheck />,
-    children: message,
+    radius: "md",
   });
 }

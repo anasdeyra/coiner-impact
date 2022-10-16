@@ -6,7 +6,13 @@ export const edit = adminProcedure
   .input(
     z.object({
       topic: z.string().optional(),
-      title: z.string().optional(),
+      title: z
+        .string()
+        .regex(/^[\w\-. ]+$/, {
+          message:
+            "The title should contain only alphanumeric characters, -, _, . and space",
+        })
+        .optional(),
       slug: z.string().optional(),
       imageUrl: z.string().url().optional(),
       content: z.string().optional(),

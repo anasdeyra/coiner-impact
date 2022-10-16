@@ -18,14 +18,17 @@ export default function AuthorCredits({
     <Group spacing={14} align={"center"}>
       <Avatar //@ts-ignore
         radius={"50%"}
+        component={NextLink}
+        href="#"
         size={"sm"}
         src={author.image}
+        alt={author.name || "profile picture"}
       />
 
       <Group align={"center"} spacing={10} position={"center"}>
         <Text size={14} color={"dimmed"} weight="normal">
           By{" "}
-          <Link passHref href={`/profile/${author.id}`}>
+          <Link passHref href={`#`}>
             <Text
               component={NextLink}
               variant="link"

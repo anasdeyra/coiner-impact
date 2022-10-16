@@ -10,7 +10,8 @@ export const NAVICONS = [
 export const SEO = {
   title: "Coiner impact",
   description: "Coiner impact is the web3 tech magazine",
-  image: "",
+  image:
+    "https://media.sketchfab.com/models/2bda6b05667f4685bc2aa9dc56b70d32/thumbnails/d2f1cedab0314c8da4b5ec216ccb1584/1024x576.jpeg",
   twitterhandler: "@coiner_impact",
-  website: "https://coiner-impact.com/",
+  website: "https://www.coiner-impact.com",
 };

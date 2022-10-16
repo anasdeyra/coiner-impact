@@ -1,10 +1,20 @@
 import { GetStaticPaths } from "next";
 import prisma from "@db";
 import { Article as Ar, User } from "@prisma/client";
-import { Title, AspectRatio, Space } from "@mantine/core";
+import {
+  Title,
+  AspectRatio,
+  Space,
+  Text,
+  MediaQuery,
+  Group,
+} from "@mantine/core";
 import Content from "@/components/Content";
 import AuthorCredits from "@/components/AuthorCredits/AuthorCredits";
 import Head from "next/head";
+import { NextLink } from "@mantine/next";
+import { SEO } from "@const";
+import ShareIcons from "src/ShareIcons/ShareIcons";
 
 export default function Article({
   content,
@@ -15,63 +25,77 @@ export default function Article({
   publishedAt,
   updatedAt,
 }: Ar & { author: User }) {
+  const link = `${SEO.website}/article/${title
+    ?.toLowerCase()
+    .replaceAll(" ", "-")}`;
+  if (!content) return "dont forget to put something here";
   return (
     <>
-      {content && (
-        <Head>
-          {/* basic OG */}
-          <title>{title}</title>
-          <meta name="description" content={slug} />
-          <meta
-            property="og:url"
-            content={`https://coiner-impact.com/article/${title
-              ?.toLowerCase()
-              .replaceAll(" ", "-")}`}
-          />
-          <meta property="og:title" content={title} />
-          <meta property="og:description" content={slug} />
-          <meta property="og:image" content={imageUrl} />
+      <Head>
+        {/* basic OG */}
+        <title>{SEO.title + " - " + title}</title>
+        <meta name="description" content={slug} />
+        <meta property="og:url" content={link} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={slug} />
+        <meta property="og:image" content={imageUrl} />
 
-          {/* article OG */}
+        {/* article OG */}
 
-          <meta property="og:type" content="article" />
-          <meta
-            property="article:published_time"
-            content={publishedAt?.toString()}
-          />
-          <meta
-            property="article:modified_time"
-            content={updatedAt?.toString()}
-          />
-          {/* <meta property="article:author" content={title} /> */}
-          {/* <meta property="article:section" content={topic} /> */}
-
-          {/* twitter tags */}
-          <meta name="twitter:card" content="summary" />
-          <meta name="twitter:site" content="@coiner_impact" />
-          <meta name="twitter:title" content={title} />
-          <meta name="twitter:description" content={slug} />
-          <meta name="twitter:creator" content="@coiner_impact" />
-          <meta name="twitter:image" content={imageUrl} />
-        </Head>
-      )}
-      <Title order={1} size={32}>
-        {title}
-      </Title>
-      <AspectRatio mb={32} mt={24} ratio={16 / 10}>
-        <img
-          style={{
-            objectFit: "cover",
-            height: "100%",
-            borderRadius: 8,
-            boxShadow:
-              "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
-          }}
-          src={imageUrl}
-          alt={title}
+        <meta property="og:type" content="article" />
+        <meta
+          property="article:published_time"
+          content={publishedAt?.toString()}
         />
+        <meta
+          property="article:modified_time"
+          content={updatedAt?.toString()}
+        />
+        {/* <meta property="article:author" content={title} /> */}
+        {/* <meta property="article:section" content={topic} /> */}
+
+        {/* twitter tags */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@coiner_impact" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={slug} />
+        <meta name="twitter:creator" content="@coiner_impact" />
+        <meta name="twitter:image" content={imageUrl} />
+      </Head>
+
+      <MediaQuery smallerThan={"sm"} styles={{ display: "none" }}>
+        <Title order={1} weight={800} size={48}>
+          {title}
+        </Title>
+      </MediaQuery>
+      <MediaQuery largerThan={"sm"} styles={{ display: "none" }}>
+        <Title order={1} weight={800} size={32}>
+          {title}
+        </Title>
+      </MediaQuery>
+      <Group mt={24} align={"center"}>
+        <Text weight={"bold"}>Share:</Text>
+        <Group spacing={"xs"}>
+          <ShareIcons link={link} />
+        </Group>
+      </Group>
+      <AspectRatio mb={32} mt={24} ratio={16 / 10}>
+        <MediaQuery smallerThan={"lg"} styles={{ borderRadius: 14 }}>
+          <MediaQuery largerThan={"lg"} styles={{ borderRadius: 20 }}>
+            <img
+              style={{
+                objectFit: "cover",
+                height: "100%",
+                boxShadow:
+                  "rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px",
+              }}
+              src={imageUrl}
+              alt={title}
+            />
+          </MediaQuery>
+        </MediaQuery>
       </AspectRatio>
-      {author && <AuthorCredits author={author} publishedAt={publishedAt} />}
+      <AuthorCredits author={author} publishedAt={publishedAt} />
       <Space mt={16} />
       <Content content={content} />
     </>
@@ -99,6 +123,6 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
   }));
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };

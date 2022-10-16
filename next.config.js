@@ -7,6 +7,9 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  // images: {
+  //   domains: [`https://res.cloudinary.com/${process.env.CLOUDINARY_NAME}`],
+  // },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

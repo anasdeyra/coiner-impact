@@ -4,6 +4,7 @@ import { FiSearch as SearchIcon } from "react-icons/fi";
 export default function SearchBar({ grow = 0 }) {
   return (
     <TextInput
+      color="dark"
       sx={{ flexGrow: grow, maxWidth: 700 }}
       rightSection={
         <ActionIcon variant="transparent">

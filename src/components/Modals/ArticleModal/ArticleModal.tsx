@@ -147,9 +147,9 @@ export default function ArticleModal({ close, mode, opened, article }: Props) {
             loaderProps={{ color: "dark" }}
             visible={isLoading}
             overlayColor="#666"
-            overlayBlur={1}
+            overlayBlur={2}
           />
-          <Group grow>
+          <Group align={"start"} grow>
             <TextInput
               radius={"md"}
               label="Title"
