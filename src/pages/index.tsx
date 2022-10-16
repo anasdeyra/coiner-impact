@@ -25,9 +25,8 @@ const PriceMarquee = dynamic(
   () => import("../components/PriceMarquee/PriceMarquee")
 );
 
-const Home = ({
-  featured,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const Home = () => {
+  const featuredArticleQuery = trpc.article.getFeatured.useQuery();
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
       limit: 8,
@@ -63,16 +62,16 @@ const Home = ({
           <Title mb={32} order={1}>
             Article of The Day
           </Title>
-          {featured && (
+          {featuredArticleQuery.data && (
             <>
               <MediaQuery largerThan={"lg"} styles={{ display: "none" }}>
                 <div>
-                  <AotD small {...featured.article} />
+                  <AotD small {...featuredArticleQuery.data.article} />
                 </div>
               </MediaQuery>
               <MediaQuery smallerThan={"lg"} styles={{ display: "none" }}>
                 <div>
-                  <AotD {...featured.article} />
+                  <AotD {...featuredArticleQuery.data.article} />
                 </div>
               </MediaQuery>
             </>
@@ -111,16 +110,15 @@ const Home = ({
   );
 };
 
-//@ts-ignore: see u later
-export const getServerSideProps = async ({ req, res }) => {
-  //@ts-ignore: see u later
-  const context = await createContext({ req, res });
-  const response = await articleCaller(context).getFeatured();
-  const featured: typeof response = JSON.parse(JSON.stringify(response));
-  return {
-    props: { featured },
-  };
-};
+// export const getServerSideProps = async ({ req, res }) => {
+
+//   const context = await createContext({ req, res });
+//   const response = await articleCaller(context).getFeatured();
+//   const featured: typeof response = JSON.parse(JSON.stringify(response));
+//   return {
+//     props: { featured },
+//   };
+// };
 
 function SEOTags() {
   return (
