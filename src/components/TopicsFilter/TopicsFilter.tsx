@@ -10,7 +10,7 @@ export default function TopicsFilter() {
     <>
       <Topic isActive>All</Topic>
       {TOPICS.map((topic) => (
-        <Topic>{topic}</Topic>
+        <Topic key={topic}>{topic}</Topic>
       ))}
     </>
   );
