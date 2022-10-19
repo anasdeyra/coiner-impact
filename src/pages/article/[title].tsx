@@ -12,7 +12,6 @@ import {
 import Content from "@/components/Content";
 import AuthorCredits from "@/components/AuthorCredits/AuthorCredits";
 import Head from "next/head";
-import { NextLink } from "@mantine/next";
 import { SEO } from "@const";
 import ShareIcons from "src/ShareIcons/ShareIcons";
 
@@ -109,9 +108,10 @@ export const getStaticProps = async (ctx: any) => {
     where: { title, isPublished: true },
     include: { author: true },
   });
+  if (!article) return { notFound: true };
   return {
     props: { ...JSON.parse(JSON.stringify(article)) },
-    // revalidate: 600, // ISG 10 mins
+    revalidate: 24 * 60 * 60, // ISG daily
   };
 };
 

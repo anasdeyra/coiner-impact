@@ -1,10 +1,34 @@
 import { trpc } from "@/trpc/hook";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Loader, SimpleGrid, Center } from "@mantine/core";
+import {
+  Loader,
+  SimpleGrid,
+  Center,
+  Stack,
+  MediaQuery,
+  Box,
+  Image,
+  createStyles,
+  Title,
+} from "@mantine/core";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
+import SearchBar from "@/components/SearchBar/SearchBar";
+
+const useStyles = createStyles((theme) => ({
+  title: {
+    textAlign: "center",
+    fontWeight: 900,
+    fontSize: 38,
+
+    [theme.fn.smallerThan("sm")]: {
+      fontSize: 32,
+    },
+  },
+}));
 
 export default function search() {
+  const { classes } = useStyles();
   const { query } = useRouter();
   const searchQuery = trpc.article.search.useInfiniteQuery(
     {
@@ -34,7 +58,23 @@ export default function search() {
     };
   }, [searchQuery.fetchNextPage, searchQuery.hasNextPage]);
 
-  if (query.query === undefined) return <>search for sum bro</>;
+  if (query.query === undefined)
+    return (
+      <Stack align={"center"} mt={48} spacing={0}>
+        <MediaQuery largerThan={"md"} styles={{ display: "none" }}>
+          <Box mb={16} mx={"auto"} sx={{ minWidth: "80%" }}>
+            <SearchBar />
+          </Box>
+        </MediaQuery>
+
+        <Title className={classes.title}>
+          Try searching for "Doge coin" ...
+        </Title>
+        <Box mt={48} sx={{ maxWidth: 700 }}>
+          <Image src={"/search.svg"} />
+        </Box>
+      </Stack>
+    );
 
   if (searchQuery.isInitialLoading)
     return (
@@ -44,10 +84,36 @@ export default function search() {
     );
 
   if (searchQuery.data === undefined)
-    return <>There was a problem with the search fam</>;
+    return (
+      <Stack align={"center"} mt={48} spacing={0}>
+        <MediaQuery largerThan={"md"} styles={{ display: "none" }}>
+          <Box mb={16} mx={"auto"} sx={{ minWidth: "80%" }}>
+            <SearchBar />
+          </Box>
+        </MediaQuery>
+        <Title className={classes.title}>
+          Hmm seems like a problem occured
+        </Title>
+        <Box sx={{ maxWidth: 700 }}>
+          <Image src={"/404.svg"} />
+        </Box>
+      </Stack>
+    );
 
   if (searchQuery.data?.pages[0].articles.length === 0)
-    return <>nothing found</>;
+    return (
+      <Stack align={"center"} mt={48} spacing={0}>
+        <MediaQuery largerThan={"md"} styles={{ display: "none" }}>
+          <Box mb={16} mx={"auto"} sx={{ minWidth: "80%" }}>
+            <SearchBar />
+          </Box>
+        </MediaQuery>
+        <Title className={classes.title}>Nothing was found!</Title>
+        <Box sx={{ maxWidth: 700 }}>
+          <Image src={"/no-result.svg"} />
+        </Box>
+      </Stack>
+    );
 
   return (
     <>

@@ -6,7 +6,7 @@ import {
   FiMenu,
   FiBell,
 } from "react-icons/fi";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMediaQuery } from "@mantine/hooks";
 import UserMenu from "./UserMenu";
 import { NextLink } from "@mantine/next";
@@ -48,7 +48,7 @@ export default function Header() {
         )}
 
         <Group spacing={16} position="right">
-          <ActionIcon variant="transparent">
+          <ActionIcon component={NextLink} href="/search" variant="transparent">
             <SearchIcon color={"#111"} size={24} />
           </ActionIcon>
           {data && (
