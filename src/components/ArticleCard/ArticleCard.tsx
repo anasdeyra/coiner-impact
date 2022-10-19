@@ -36,10 +36,11 @@ export default function ArticleCard({
           </AspectRatio>
         </NextLink>
 
-        <Text weight={700} size={"lg"} mt={16}>
+        <Text component="h3" weight={700} size={"lg"} mb={0} mt={16}>
           {title}
         </Text>
         <Text
+          component="h4"
           mb={withAuthor ? "xs" : 0}
           color={"dimmed"}
           weight={"bold"}

@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  previewFeatures = ["referentialIntegrity","fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -17,6 +17,8 @@ model Account {
   providerAccountId String
   refresh_token     String? @db.Text
   access_token      String? @db.Text
+  oauth_token     String? @db.Text
+  oauth_token_secret      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?

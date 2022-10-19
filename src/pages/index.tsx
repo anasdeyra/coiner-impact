@@ -1,7 +1,7 @@
 import {
   Box,
   Stack,
-  Title,
+  Text,
   MediaQuery,
   SimpleGrid,
   Loader,
@@ -10,9 +10,6 @@ import {
   ScrollArea,
 } from "@mantine/core";
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
-import { InferGetServerSidePropsType } from "next";
-import { createContext } from "@/trpc/context";
-import { articleCaller } from "@/trpc/routers/article/articleRouter";
 import dynamic from "next/dynamic";
 import { SEO } from "@const";
 import Head from "next/head";
@@ -59,9 +56,9 @@ const Home = () => {
       <PriceMarquee />
       <Stack mt={48} spacing={72}>
         <Box>
-          <Title mb={32} order={1}>
+          <Text component="h2" size={32} weight={"bold"} mb={32}>
             Article of The Day
-          </Title>
+          </Text>
           {featuredArticleQuery.data && (
             <>
               <MediaQuery largerThan={"lg"} styles={{ display: "none" }}>
@@ -78,9 +75,11 @@ const Home = () => {
           )}
         </Box>
         <Box>
-          <Title order={1}>Latest Articles</Title>
+          <Text component="h2" size={32} weight={"bold"}>
+            Latest Articles
+          </Text>
           <ScrollArea type="never">
-            <Group py={2} noWrap mt={24}>
+            <Group py={2} noWrap mt={0}>
               <TopicsFilter />
             </Group>
           </ScrollArea>

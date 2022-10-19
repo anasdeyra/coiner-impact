@@ -27,10 +27,10 @@ export default function ArticleOfTheDay({
           />
         </Card.Section>
 
-        <Text color={"white"} weight={"bold"} size={20} mt="md">
+        <Text component="h1" color={"white"} weight={"bold"} size={20} mt="md">
           {title}
         </Text>
-        <Text mt="xs" color={"#d9d9d9"} weight="bold" size={14}>
+        <Text component="h2" mt="xs" color={"#d9d9d9"} weight="bold" size={14}>
           {slug}
         </Text>
         <Button
