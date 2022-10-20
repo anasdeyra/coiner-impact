@@ -35,8 +35,6 @@ const Home = () => {
     }
   );
 
-  latestArticles.refetch({});
-
   useEffect(() => {
     let fetching = false;
     const handleScroll = async (e: any) => {
