@@ -150,7 +150,7 @@ export default function Article({
           </Title>
           <SimpleGrid mt={48} breakpoints={[{ minWidth: "xs", cols: 2 }]}>
             {authorArticles.data.map((props) => (
-              <ArticleCard isPublished {...props} />
+              <ArticleCard key={props.id} isPublished {...props} />
             ))}
           </SimpleGrid>
         </>

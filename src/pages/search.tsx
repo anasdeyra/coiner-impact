@@ -68,7 +68,7 @@ export default function search() {
         </MediaQuery>
 
         <Title className={classes.title}>
-          Try searching for "Doge coin" ...
+          Try searching for &quot;Doge coin&quot; ...
         </Title>
         <Box mt={48} sx={{ maxWidth: 700 }}>
           <Image src={"/search.svg"} />
