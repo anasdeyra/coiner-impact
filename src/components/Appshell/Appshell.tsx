@@ -18,6 +18,7 @@ export default function Appshell({ children }: { children: ReactNode }) {
       aside={<Aside />}
       footer={<Footer />}
       header={<Header />}
+      sx={{ marginBottom: 72 }}
     >
       {isBig && <DesktopHeader />}
       {children}

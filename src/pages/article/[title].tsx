@@ -8,12 +8,18 @@ import {
   Text,
   MediaQuery,
   Group,
+  Loader,
+  Center,
+  SimpleGrid,
 } from "@mantine/core";
 import Content from "@/components/Content";
 import AuthorCredits from "@/components/AuthorCredits/AuthorCredits";
 import Head from "next/head";
 import { SEO } from "@const";
 import ShareIcons from "src/ShareIcons/ShareIcons";
+import { trpc } from "@/trpc/hook";
+import { useEffect } from "react";
+import ArticleCard from "@/components/ArticleCard/ArticleCard";
 
 export default function Article({
   content,
@@ -23,11 +29,48 @@ export default function Article({
   slug,
   publishedAt,
   updatedAt,
+  id,
+  authorId,
+  topic,
 }: Ar & { author: User }) {
+  const authorArticles = trpc.article.fromAuthor.useQuery({
+    authorId,
+    count: 2,
+    excludedId: id,
+  });
+
+  const relatedArticles = trpc.article.latest.useInfiniteQuery(
+    {
+      limit: 8,
+      topic,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
   const link = `${SEO.website}/article/${title
     ?.toLowerCase()
     .replaceAll(" ", "-")}`;
-  if (!content) return "dont forget to put something here";
+
+  useEffect(() => {
+    let fetching = false;
+    const handleScroll = async (e: any) => {
+      const { scrollHeight, scrollTop, clientHeight } =
+        e.target.scrollingElement;
+      if (!fetching && scrollHeight - scrollTop <= clientHeight * 1.2) {
+        fetching = true;
+        if (relatedArticles.hasNextPage) await relatedArticles.fetchNextPage();
+        fetching = false;
+      }
+    };
+    document.addEventListener("scroll", handleScroll);
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, [relatedArticles.fetchNextPage, relatedArticles.hasNextPage]);
+
+  if (!content) return null;
   return (
     <>
       <Head>
@@ -95,8 +138,48 @@ export default function Article({
         </MediaQuery>
       </AspectRatio>
       <AuthorCredits author={author} publishedAt={publishedAt} />
-      <Space mt={16} />
+      <Title mt={48} order={2} size={18} color="dimmed">
+        {slug}
+      </Title>
+      <Space mt={32} />
       <Content content={content} />
+      {authorArticles.data && authorArticles.data?.length > 0 && (
+        <>
+          <Title mt={96} order={2} size={32}>
+            More from {author.name}
+          </Title>
+          <SimpleGrid mt={48} breakpoints={[{ minWidth: "xs", cols: 2 }]}>
+            {authorArticles.data.map((props) => (
+              <ArticleCard isPublished {...props} />
+            ))}
+          </SimpleGrid>
+        </>
+      )}
+
+      <Title mt={48} order={2} size={32}>
+        Related articles
+      </Title>
+      <SimpleGrid
+        breakpoints={[
+          { minWidth: "xs", cols: 2 },
+          { minWidth: "lg", cols: 3 },
+          { minWidth: "xl", cols: 4 },
+        ]}
+        mt={48}
+        spacing={"xl"}
+      >
+        {relatedArticles.data?.pages.map(({ articles }) =>
+          articles.map(
+            (props, i) =>
+              props.id !== id && <ArticleCard withAuthor {...props} key={i} />
+          )
+        )}
+      </SimpleGrid>
+      {relatedArticles.isFetching && (
+        <Center mt={48}>
+          <Loader color="dark" />
+        </Center>
+      )}
     </>
   );
 }

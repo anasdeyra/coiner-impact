@@ -37,7 +37,7 @@ export const search = publicProcedure
         isPublished: true,
         author: { select: { name: true, image: true } },
       },
-      orderBy: { id: "desc" },
+      orderBy: { publishedAt: "desc" },
     });
     let nextCursor: typeof cursor | undefined = undefined;
     if (articles.length > limit) {

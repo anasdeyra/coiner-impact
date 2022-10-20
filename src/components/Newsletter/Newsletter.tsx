@@ -35,7 +35,7 @@ export default function Newsletter() {
   return (
     //@ts-ignore: dynamic import bug
     <Paper sx={{ background: "#111" }} radius={"md"} shadow="lg" p={"md"}>
-      <Stack>
+      <Stack spacing={"xl"}>
         <Text weight={500} align="center" color={"white"}>
           Get our best tips. Join the smartest marketers who receive our twice
           monthly update

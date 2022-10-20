@@ -116,14 +116,22 @@ export default function search() {
     );
 
   return (
-    <>
+    <Box mt={48}>
+      <MediaQuery largerThan={"md"} styles={{ display: "none" }}>
+        <Box mx={"auto"} sx={{ maxWidth: "80%" }}>
+          <SearchBar />
+        </Box>
+      </MediaQuery>
+      <Title mt={32} order={2} size={32}>
+        Search results
+      </Title>
       <SimpleGrid
         breakpoints={[
           { minWidth: "xs", cols: 2 },
           { minWidth: "lg", cols: 3 },
           { minWidth: "xl", cols: 4 },
         ]}
-        mt={48}
+        mt={32}
         spacing={"xl"}
       >
         {searchQuery.data?.pages.map(({ articles }) =>
@@ -137,6 +145,6 @@ export default function search() {
           <Loader color="dark" />
         </Center>
       )}
-    </>
+    </Box>
   );
 }

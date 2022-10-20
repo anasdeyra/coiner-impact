@@ -15,7 +15,7 @@ import { SEO } from "@const";
 import Head from "next/head";
 import { trpc } from "@/trpc/hook";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import TopicsFilter from "@/components/TopicsFilter/TopicsFilter";
 
 const PriceMarquee = dynamic(
@@ -23,15 +23,19 @@ const PriceMarquee = dynamic(
 );
 
 const Home = () => {
+  const [topic, setTopic] = useState<string | undefined>();
   const featuredArticleQuery = trpc.article.getFeatured.useQuery();
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
       limit: 8,
+      topic,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
     }
   );
+
+  latestArticles.refetch({});
 
   useEffect(() => {
     let fetching = false;
@@ -80,7 +84,7 @@ const Home = () => {
           </Text>
           <ScrollArea type="never">
             <Group py={2} noWrap mt={0}>
-              <TopicsFilter />
+              <TopicsFilter topic={topic} setTopic={setTopic} />
             </Group>
           </ScrollArea>
           <SimpleGrid
@@ -98,7 +102,7 @@ const Home = () => {
               ))
             )}
           </SimpleGrid>
-          {latestArticles.isFetching && (
+          {latestArticles.isLoading && (
             <Center mt={48}>
               <Loader color="dark" />
             </Center>
