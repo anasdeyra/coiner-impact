@@ -28,7 +28,6 @@ const Home = () => {
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
       limit: 8,
-      topic,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -52,7 +51,7 @@ const Home = () => {
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [latestArticles.fetchNextPage, latestArticles.hasNextPage]);
+  }, [latestArticles]);
 
   return (
     <>
@@ -113,15 +112,12 @@ const Home = () => {
   );
 };
 
-// export const getServerSideProps = async ({ req, res }) => {
-
-//   const context = await createContext({ req, res });
-//   const response = await articleCaller(context).getFeatured();
-//   const featured: typeof response = JSON.parse(JSON.stringify(response));
-//   return {
-//     props: { featured },
-//   };
-// };
+export const getStaticProps = async () => {
+  return {
+    props: {},
+    revalidate: 24 * 60 * 60, // ISG daily
+  };
+};
 
 function SEOTags() {
   return (
