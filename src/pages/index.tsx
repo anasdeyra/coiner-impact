@@ -28,6 +28,7 @@ const Home = () => {
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
       limit: 8,
+      topic,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
