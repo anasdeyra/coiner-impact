@@ -27,7 +27,7 @@ const Home = () => {
   const featuredArticleQuery = trpc.article.getFeatured.useQuery();
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
-      limit: 8,
+      limit: 24,
       topic,
     },
     {

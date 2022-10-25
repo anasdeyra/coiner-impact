@@ -41,7 +41,7 @@ export default function Article({
 
   const relatedArticles = trpc.article.latest.useInfiniteQuery(
     {
-      limit: 8,
+      limit: 12,
       topic,
     },
     {

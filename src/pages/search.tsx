@@ -33,7 +33,7 @@ export default function search() {
   const searchQuery = trpc.article.search.useInfiniteQuery(
     {
       searchString: String(query?.query),
-      limit: 16,
+      limit: 24,
     },
     {
       enabled: typeof query?.query === "string",

@@ -18,7 +18,7 @@ export const SEO = {
 };
 
 export const TOPICS = [
-  Topic.blockcain,
+  Topic.blockchain,
   Topic.crypto,
   Topic.cyber,
   Topic.nft,
