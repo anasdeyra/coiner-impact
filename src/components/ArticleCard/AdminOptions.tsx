@@ -137,7 +137,7 @@ interface Props {
   publishHandler: () => void;
   deleteHandler: () => void;
   featureHandler: () => void;
-  article: Article & { author: User };
+  article: Article & { author: User | any };
   isPublishing: boolean;
   isDeleting: boolean;
   isFeatured?: boolean;

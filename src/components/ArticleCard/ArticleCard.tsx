@@ -61,6 +61,6 @@ export default function ArticleCard({
 }
 
 export interface ArticleCardProps extends Partial<Article> {
-  author?: User;
+  author?: { id: string; image: string | null; name: string | null } | any;
   withAuthor?: boolean;
 }
