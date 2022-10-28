@@ -9,6 +9,8 @@ import {
   Group,
   ScrollArea,
 } from "@mantine/core";
+import { createProxySSGHelpers } from "@trpc/react-query/ssg";
+
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
 import dynamic from "next/dynamic";
 import { SEO } from "@const";
@@ -17,6 +19,8 @@ import { trpc } from "@/trpc/hook";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
 import { useEffect, useState } from "react";
 import TopicsFilter from "@/components/TopicsFilter/TopicsFilter";
+import { createContext } from "@/trpc/context";
+import { appRouter } from "@/trpc/router";
 
 const PriceMarquee = dynamic(
   () => import("../components/PriceMarquee/PriceMarquee")
@@ -24,7 +28,13 @@ const PriceMarquee = dynamic(
 
 const Home = () => {
   const [topic, setTopic] = useState<string | undefined>();
-  const featuredArticleQuery = trpc.article.getFeatured.useQuery();
+  const featuredArticleQuery = trpc.article.getFeatured.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    retry: false,
+    staleTime: Infinity,
+  });
   const latestArticles = trpc.article.latest.useInfiniteQuery(
     {
       limit: 24,
@@ -32,6 +42,11 @@ const Home = () => {
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      staleTime: Infinity,
     }
   );
 
@@ -111,12 +126,18 @@ const Home = () => {
   );
 };
 
-// export const getStaticProps = async () => {
-//   return {
-//     props: {},
-//     revalidate: 24 * 60 * 60, // ISG daily
-//   };
-// };
+export const getStaticProps = async (ctx: any) => {
+  const ssg = createProxySSGHelpers({
+    ctx: await createContext(ctx),
+    router: appRouter,
+  });
+  await ssg.article.getFeatured.prefetch();
+  await ssg.article.latest.prefetchInfinite({ limit: 24 });
+  return {
+    props: { trpcState: JSON.parse(JSON.stringify(ssg.dehydrate())) },
+    revalidate: 24 * 60 * 60, // ISG daily
+  };
+};
 
 function SEOTags() {
   return (
