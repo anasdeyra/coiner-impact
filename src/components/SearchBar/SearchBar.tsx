@@ -12,7 +12,7 @@ export default function SearchBar({ grow = 0 }) {
 
   useEffect(() => {
     if (!pathname.startsWith("/search")) setFieldValue("query", "");
-  }, [pathname]);
+  }, [pathname, setFieldValue]);
   return (
     <form
       style={{ flexGrow: grow, maxWidth: 700 }}

@@ -9,12 +9,12 @@ export const NAVICONS = [
 ];
 
 export const SEO = {
-  title: "Coiner impact",
-  description: "Coiner impact is the web3 tech magazine",
-  image:
-    "https://media.sketchfab.com/models/2bda6b05667f4685bc2aa9dc56b70d32/thumbnails/d2f1cedab0314c8da4b5ec216ccb1584/1024x576.jpeg",
-  twitterhandler: "@coiner_impact",
-  website: "dev-impact.vercel.app",
+  title: "Coiner impact: Bitcoin, Ethereum, Crypto News and Price Data",
+  description:
+    "The source for the latest cryptocurrency, Bitcoin, Ethereum, XRP, blockchain, Defi, digital finance, and Web 3.0 news with analysis, video, and live price updates.",
+  image: "/logo.png",
+  twitterhandler: "@CoinerImpact",
+  website: "coinerimpact.com",
 };
 
 export const TOPICS = [

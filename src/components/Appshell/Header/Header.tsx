@@ -5,17 +5,20 @@ import {
   FiBookmark,
   FiMenu,
   FiBell,
+  FiX,
 } from "react-icons/fi";
 import { useSession } from "next-auth/react";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import UserMenu from "./UserMenu";
 import { NextLink } from "@mantine/next";
+import NavModal from "@/components/NavDrawer/NavDrawer";
 
 export default function Header() {
   const { data } = useSession();
   const isSmall = useMediaQuery("(max-width: 992px)", false, {
     getInitialValueInEffect: true,
   });
+  const [opened, { open, close, toggle }] = useDisclosure(false);
   return (
     <H
       sx={!isSmall ? { display: "none" } : {}}
@@ -23,6 +26,7 @@ export default function Header() {
       height={isSmall ? 55 + 16 : 0}
       withBorder={false}
     >
+      {opened && <NavModal opened={opened} onClose={close} />}
       <Group
         sx={{ borderBottom: "1px solid #e9ecef" }}
         py={16}
@@ -61,8 +65,17 @@ export default function Header() {
               </ActionIcon>
             </>
           )}
-          <ActionIcon variant="transparent">
-            <FiMenu color={"#111"} size={24} />
+          <ActionIcon
+            onClick={() => {
+              toggle();
+            }}
+            variant="transparent"
+          >
+            {opened ? (
+              <FiX color={"#111"} size={24} />
+            ) : (
+              <FiMenu color={"#111"} size={24} />
+            )}
           </ActionIcon>
         </Group>
       </Group>

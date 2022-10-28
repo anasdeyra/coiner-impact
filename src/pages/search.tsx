@@ -38,6 +38,11 @@ export default function search() {
     {
       enabled: typeof query?.query === "string",
       getNextPageParam: (lastPage) => lastPage.nextCursor,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      retry: false,
+      staleTime: Infinity,
     }
   );
 
@@ -56,7 +61,7 @@ export default function search() {
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [searchQuery.fetchNextPage, searchQuery.hasNextPage]);
+  }, [searchQuery]);
 
   if (query.query === undefined)
     return (

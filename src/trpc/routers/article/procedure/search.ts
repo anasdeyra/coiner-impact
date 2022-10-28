@@ -15,6 +15,10 @@ export const search = publicProcedure
     const limit = input.limit ?? 50;
     const { cursor, searchString } = input;
 
+    await prisma.searchHistory.create({
+      data: { query: searchString, userId: ctx.session?.user.id },
+    });
+
     const articles = await prisma.article.findMany({
       take: limit + 1,
       cursor: cursor ? { id: cursor } : undefined,

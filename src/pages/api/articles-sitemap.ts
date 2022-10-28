@@ -2,7 +2,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { SitemapStream, streamToPromise } from "sitemap";
 import prisma from "@db";
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function sitemap(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const smStream = new SitemapStream({
       hostname: `https://${req.headers.host}`,
@@ -44,4 +47,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(e);
     res.send(JSON.stringify(e));
   }
-};
+}

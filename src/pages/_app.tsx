@@ -8,6 +8,7 @@ import { trpc } from "@/trpc/hook";
 import { NotificationsProvider } from "@mantine/notifications";
 import { Global } from "@emotion/react";
 import { SEO } from "@const";
+import Script from "next/script";
 
 function App({ Component, pageProps }: AppProps<{ session: Session }>) {
   return (
@@ -19,12 +20,13 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7629850326051906"
-          crossOrigin="anonymous"
-        />
+        <link rel="icon" type="image" href="/logo.png"></link>
       </Head>
+      <Script
+        strategy="afterInteractive"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7629850326051906"
+        crossOrigin="anonymous"
+      />
       <SessionProvider session={pageProps.session}>
         <MantineProvider
           withGlobalStyles

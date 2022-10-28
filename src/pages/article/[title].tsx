@@ -68,7 +68,7 @@ export default function Article({
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [relatedArticles.fetchNextPage, relatedArticles.hasNextPage]);
+  }, [relatedArticles]);
 
   if (!content) return null;
   return (
@@ -93,15 +93,15 @@ export default function Article({
           property="article:modified_time"
           content={updatedAt?.toString()}
         />
-        {/* <meta property="article:author" content={title} /> */}
+        <meta property="article:author" content={author.name ?? ""} />
         {/* <meta property="article:section" content={topic} /> */}
 
         {/* twitter tags */}
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:site" content="@coiner_impact" />
+        <meta name="twitter:site" content={SEO.twitterhandler} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={slug} />
-        <meta name="twitter:creator" content="@coiner_impact" />
+        <meta name="twitter:creator" content={SEO.twitterhandler} />
         <meta name="twitter:image" content={imageUrl} />
       </Head>
 

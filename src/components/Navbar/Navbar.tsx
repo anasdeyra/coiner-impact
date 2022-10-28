@@ -15,7 +15,7 @@ export default function Navbar() {
           <NextLink href={"/"}>
             <Image
               alt="logo"
-              src={"/logo4.png"}
+              src={"/logo.png"}
               height={40}
               width={40}
               style={{ borderRadius: "50%" }}

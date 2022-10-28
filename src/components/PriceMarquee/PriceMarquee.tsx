@@ -50,7 +50,7 @@ export default function PriceMarquee({
     getPrices();
 
     setInterval(getPrices, 60000);
-  }, []);
+  }, [url, url2]);
   if (prices.length > 0)
     return (
       <Marquee
