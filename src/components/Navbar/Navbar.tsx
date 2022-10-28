@@ -1,7 +1,6 @@
 import { NAVICONS } from "@const";
-import { MediaQuery, Navbar as N, Stack, Box } from "@mantine/core";
+import { MediaQuery, Navbar as N, Stack, Box, Image } from "@mantine/core";
 import NavIcon from "@/components/NavIcon/NavIcon";
-import Image from "next/image";
 import { FiLogOut } from "react-icons/fi";
 import { NextLink } from "@mantine/next";
 import { signOut, useSession } from "next-auth/react";
