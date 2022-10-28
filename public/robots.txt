@@ -1,0 +1,6 @@
+Sitemap: https://dev-impact.vercel.app/api/articles-sitemap
+
+User-agent: *
+Allow: /*
+
+Disallow: /api/*
