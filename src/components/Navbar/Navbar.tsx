@@ -1,9 +1,9 @@
 import { NAVICONS } from "@const";
-import { MediaQuery, Navbar as N, Stack, Box, Image } from "@mantine/core";
+import { MediaQuery, Navbar as N, Stack, Box } from "@mantine/core";
 import NavIcon from "@/components/NavIcon/NavIcon";
 import { FiLogOut } from "react-icons/fi";
-import { NextLink } from "@mantine/next";
 import { signOut, useSession } from "next-auth/react";
+import Logo from "../Logo/Logo";
 
 export default function Navbar() {
   const { data } = useSession();
@@ -11,15 +11,7 @@ export default function Navbar() {
     <MediaQuery smallerThan={"md"} styles={{ display: "none" }}>
       <N p={16} width={{ sm: 0, md: 72 }}>
         <N.Section>
-          <NextLink href={"/"}>
-            <Image
-              alt="logo"
-              src={"/logo.png"}
-              height={40}
-              width={40}
-              style={{ borderRadius: "50%" }}
-            />
-          </NextLink>
+          <Logo />
         </N.Section>
         <N.Section grow sx={{ alignContent: "center" }}>
           <Stack mt={48} spacing={40}>

@@ -44,10 +44,11 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  articles      Article[]
+  articles      Article[] @relation("created")
   //custome fields
   role          Role      @default(user)
-  searchHistory SearchHistory[] 
+  searchHistory SearchHistory[]
+  savedArticles Article[] @relation("savedArticles")
 }
 
 model SearchHistory{
@@ -77,12 +78,19 @@ model Article {
   slug             String            @unique @db.VarChar(255)
   topic            Topic
   imageUrl         String            @unique
+  keywords         keyword[]         @relation("keywords")
   //publishing
   isPublished      Boolean           @default(false)
   publishedAt      DateTime
-  author           User              @relation(fields: [authorId], references: [id])
+  author           User              @relation(fields: [authorId], references: [id], name: "created")
   authorId         String
   Featured_Article Featured_Article?
+  usersSavedIt    User[]            @relation("savedArticles")
+}
+
+model keyword{
+  name String @id 
+  articles Article[] @relation("keywords")
 }
 
 model Featured_Article {

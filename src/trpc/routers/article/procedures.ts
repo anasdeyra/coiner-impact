@@ -9,3 +9,4 @@ export { setFeatured } from "./procedure/setFeatured";
 export { latest } from "./procedure/latest";
 export { search } from "./procedure/search";
 export { fromAuthor } from "./procedure/fromAuthor";
+export { save, unsave, getSaved } from "./procedure/saving";

@@ -34,6 +34,7 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
           theme={{
             fontFamily: "Open Sans, sans-serif",
             headings: { fontFamily: "Open Sans, sans-serif" },
+            primaryColor: "dark",
           }}
         >
           <Global

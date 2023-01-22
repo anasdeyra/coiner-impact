@@ -12,6 +12,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import UserMenu from "./UserMenu";
 import { NextLink } from "@mantine/next";
 import NavModal from "@/components/NavDrawer/NavDrawer";
+import Logo from "@/components/Logo/Logo";
 
 export default function Header() {
   const { data } = useSession();
@@ -41,14 +42,7 @@ export default function Header() {
             ></Avatar>
           </UserMenu>
         ) : (
-          <Button
-            radius={"xl"}
-            component={NextLink}
-            href="/api/auth/signin"
-            color={"dark"}
-          >
-            signin
-          </Button>
+          <Logo />
         )}
 
         <Group spacing={16} position="right">
@@ -60,7 +54,11 @@ export default function Header() {
               <ActionIcon variant="transparent">
                 <FiBell color={"#111"} size={24} />
               </ActionIcon>
-              <ActionIcon variant="transparent">
+              <ActionIcon
+                component={NextLink}
+                href="/saved"
+                variant="transparent"
+              >
                 <FiBookmark color={"#111"} size={24} />
               </ActionIcon>
             </>

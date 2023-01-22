@@ -52,7 +52,7 @@ export default function Newsletter() {
               variant="white"
               color={"dark"}
             >
-              Join news letter
+              Join Newsletter
             </Button>
           </Popover.Target>
         </Popover>

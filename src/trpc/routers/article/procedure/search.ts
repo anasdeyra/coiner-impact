@@ -19,6 +19,9 @@ export const search = publicProcedure
       data: { query: searchString, userId: ctx.session?.user.id },
     });
 
+    if (searchString.length === 0)
+      return { articles: [], nextCursor: undefined };
+
     const articles = await prisma.article.findMany({
       take: limit + 1,
       cursor: cursor ? { id: cursor } : undefined,
@@ -32,15 +35,7 @@ export const search = publicProcedure
           { slug: { contains: searchString } },
         ],
       },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        imageUrl: true,
-        publishedAt: true,
-        isPublished: true,
-        author: { select: { name: true, image: true } },
-      },
+      include: { author: true },
       orderBy: { publishedAt: "desc" },
     });
     let nextCursor: typeof cursor | undefined = undefined;

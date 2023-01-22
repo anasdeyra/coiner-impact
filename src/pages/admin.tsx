@@ -13,18 +13,33 @@ import {
   Stack,
   MediaQuery,
   Skeleton,
+  TextInput,
+  Loader,
+  Center,
 } from "@mantine/core";
 import ArticleModal from "@/components/Modals/ArticleModal/ArticleModal";
 import { useDisclosure } from "@mantine/hooks";
 import showNotification from "src/utils/showNotification";
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import AotD from "@/components/ArticleCard/ArticleOfTheDay";
-import article from "@/trpc/routers/article/articleRouter";
+
 const AdminOptions = dynamic(
   () => import("@/components/ArticleCard/AdminOptions"),
   { ssr: false }
 );
+
+function throttle<F extends (...args: any[]) => any>(func: F, wait: number): F {
+  let timeout: number | undefined;
+
+  return function (this: any, ...args: any[]) {
+    const context = this;
+
+    clearTimeout(timeout);
+    // @ts-ignore
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  } as any as F;
+}
 
 const useStyles = createStyles((t) => ({
   wrapper: { position: "relative" },
@@ -120,6 +135,17 @@ export default function admin() {
     featureMutation.mutate({ id });
   };
 
+  const [searchString, setSearchString] = useState("");
+
+  const throttledSetSearchString = useCallback(
+    throttle(setSearchString, 500),
+    []
+  );
+
+  const searchArticlesQuery = trpc.article.search.useQuery({
+    searchString,
+  });
+
   return (
     <Stack spacing={72}>
       <Box>
@@ -183,6 +209,11 @@ export default function admin() {
             Create
           </Button>
         </Group>
+        {articlesQuery.data && articlesQuery.data.length === 0 && (
+          <Text mt={32} size={18}>
+            You have no articles yet. Create one!
+          </Text>
+        )}
         <SimpleGrid
           breakpoints={[
             { minWidth: "xs", cols: 2 },
@@ -205,6 +236,81 @@ export default function admin() {
               <Box key={props.id} className={classes.wrapper}>
                 <ArticleCard {...props} slug="" />
                 <AdminOptions
+                  article={props}
+                  isDeleting={
+                    deleteMutation.isLoading && selectedArticle === props.id
+                  }
+                  deleteHandler={deleteHandler(props.id)}
+                  isPublishing={
+                    publishMutation.isLoading && selectedArticle === props.id
+                  }
+                  publishHandler={publishHandler({
+                    id: props.id,
+                    isPublished: !props.isPublished,
+                  })}
+                  isFeatured={props.id === featureQuery.data?.articleId}
+                  isFeaturing={
+                    featureMutation.isLoading && selectedArticle === props.id
+                  }
+                  featureHandler={featureHandler(props.id)}
+                />
+              </Box>
+            ))}
+        </SimpleGrid>
+        {articleModalIsOpened && (
+          <ArticleModal
+            mode="Create"
+            close={articleModalHandlers.close}
+            opened={articleModalIsOpened}
+          />
+        )}
+      </Box>
+      <Box>
+        <Text weight={"bold"} size={28} mt={48}>
+          All Articles
+        </Text>
+
+        <TextInput
+          mt={"xl"}
+          radius="xl"
+          onChange={(e) => throttledSetSearchString(e.target.value)}
+          placeholder="Search an article to edit "
+        />
+
+        {searchArticlesQuery.isLoading && (
+          <Center mt={"xl"}>
+            <Loader />
+          </Center>
+        )}
+
+        {searchString === "" ? (
+          <Text mt={32} size={18}>
+            Search an article to edit
+          </Text>
+        ) : (
+          searchArticlesQuery.data &&
+          searchArticlesQuery.data.articles.length === 0 && (
+            <Text mt={32} size={18}>
+              No articles found
+            </Text>
+          )
+        )}
+
+        <SimpleGrid
+          breakpoints={[
+            { minWidth: "xs", cols: 2 },
+            { minWidth: "lg", cols: 3 },
+            { minWidth: "xl", cols: 4 },
+          ]}
+          mt={48}
+          spacing={"xl"}
+        >
+          {searchArticlesQuery.data &&
+            searchArticlesQuery.data.articles.map((props) => (
+              <Box key={props.id} className={classes.wrapper}>
+                <ArticleCard {...props} slug="" />
+                <AdminOptions
+                  // @ts-ignore
                   article={props}
                   isDeleting={
                     deleteMutation.isLoading && selectedArticle === props.id

@@ -19,6 +19,7 @@ export default function Appshell({ children }: { children: ReactNode }) {
       footer={<Footer />}
       header={<Header />}
       sx={{ marginBottom: 72 }}
+      styles={{ main: { maxWidth: 1440, margin: "auto" } }}
     >
       {isBig && <DesktopHeader />}
       {children}

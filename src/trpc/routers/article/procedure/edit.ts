@@ -17,10 +17,11 @@ export const edit = adminProcedure
       imageUrl: z.string().url().optional(),
       content: z.string().optional(),
       isPublished: z.boolean().optional(),
+      keywords: z.array(z.string()).optional(),
       id: z.number(),
     })
   )
-  .mutation(async ({ ctx, input: { id, ...data } }) => {
+  .mutation(async ({ ctx, input: { id, keywords, ...data } }) => {
     const article = await prisma.article.findUnique({ where: { id } });
     const publishedAt =
       data.isPublished && article?.isPublished === false
@@ -29,6 +30,16 @@ export const edit = adminProcedure
     await prisma.article.update({
       where: { id },
       //@ts-ignore: Topic enum vs string
-      data: { ...data, publishedAt },
+      data: {
+        ...data,
+        publishedAt,
+        keywords: {
+          deleteMany: { NOT: { name: { in: keywords } } },
+          connectOrCreate: keywords?.map((keyword) => ({
+            where: { name: keyword },
+            create: { name: keyword },
+          })),
+        },
+      },
     });
   });

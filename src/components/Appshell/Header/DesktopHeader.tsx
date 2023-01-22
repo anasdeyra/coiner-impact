@@ -3,6 +3,7 @@ import { Box, Group, ActionIcon } from "@mantine/core";
 import SearchBar from "@/components/SearchBar/SearchBar";
 import { FiBell, FiBookmark } from "react-icons/fi";
 import { useSession } from "next-auth/react";
+import { NextLink } from "@mantine/next";
 
 export default function DesktopHeader() {
   const bigHeader = useElementSize();
@@ -37,7 +38,11 @@ export default function DesktopHeader() {
               <ActionIcon variant="transparent">
                 <FiBell color={"#111"} size={24} />
               </ActionIcon>
-              <ActionIcon variant="transparent">
+              <ActionIcon
+                component={NextLink}
+                href="/saved"
+                variant="transparent"
+              >
                 <FiBookmark color={"#111"} size={24} />
               </ActionIcon>
             </Group>
