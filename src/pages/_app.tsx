@@ -22,11 +22,20 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
         />
         <link rel="icon" type="image" href="/logo.png"></link>
       </Head>
+
+      <Script
+        async
+        src="https://www.googletagmanager.com/gtag/js?id=G-MLR73D5NK1"
+        strategy="beforeInteractive"
+      />
       <Script
         strategy="afterInteractive"
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7629850326051906"
-        crossOrigin="anonymous"
+        dangerouslySetInnerHTML={{
+          __html:
+            " window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-MLR73D5NK1');",
+        }}
       />
+
       <SessionProvider session={pageProps.session}>
         <MantineProvider
           withGlobalStyles
