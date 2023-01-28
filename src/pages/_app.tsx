@@ -29,6 +29,7 @@ function App({ Component, pageProps }: AppProps<{ session: Session }>) {
         strategy="beforeInteractive"
       />
       <Script
+        id="gtag"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html:
