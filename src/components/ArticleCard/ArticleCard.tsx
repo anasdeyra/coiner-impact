@@ -4,6 +4,7 @@ import { Box, Card, Stack, Text, AspectRatio } from "@mantine/core";
 import React from "react";
 import { Article, User } from "@prisma/client";
 import { NextLink } from "@mantine/next";
+import Link from "next/link";
 
 export default function ArticleCard({
   author,
@@ -36,9 +37,19 @@ export default function ArticleCard({
           </AspectRatio>
         </NextLink>
 
-        <Text component="h3" weight={700} size={"lg"} mb={0} mt={16}>
-          {title}
-        </Text>
+        <Link passHref href={link}>
+          <Text
+            href={link}
+            component={NextLink}
+            weight={700}
+            size={"lg"}
+            mb={0}
+            mt={16}
+            variant="link"
+          >
+            {title}
+          </Text>
+        </Link>
         <Text
           component="h4"
           mb={withAuthor ? "xs" : 0}

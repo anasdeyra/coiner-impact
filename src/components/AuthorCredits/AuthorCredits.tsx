@@ -15,7 +15,7 @@ export default function AuthorCredits({
   publishedAt: Date | string;
 }) {
   return (
-    <Group spacing={14} align={"center"}>
+    <Group noWrap spacing={14} align={"center"}>
       <Avatar //@ts-ignore
         radius={"50%"}
         component={NextLink}
@@ -25,7 +25,7 @@ export default function AuthorCredits({
         alt={author.name || "profile picture"}
       />
 
-      <Group align={"center"} spacing={10} position={"center"}>
+      <Group align={"center"} spacing={0} position={"center"}>
         <Text size={14} color={"dimmed"} weight="normal">
           By{" "}
           <Link passHref href={`#`}>
@@ -39,19 +39,21 @@ export default function AuthorCredits({
               weight={700}
               href="#"
             >
-              {author.name}
+              {author.name && author.name?.length > 17
+                ? author.name?.slice(0, 17) + "..."
+                : author.name}
             </Text>
-          </Link>
+          </Link>{" "}
         </Text>
-        <Box
-          sx={{
-            borderRadius: "50%",
-            background: "#868E96",
-            width: "6px",
-            height: "6px",
-          }}
-        />
         <Text size={14} color={"dimmed"} weight="normal">
+          <span
+            style={{
+              display: "inline-block",
+              margin: "0 4px",
+            }}
+          >
+            &bull;
+          </span>
           {dayjs(publishedAt).fromNow()}
         </Text>
       </Group>
